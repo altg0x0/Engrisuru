@@ -46,6 +46,7 @@ public class DatabaseManipulationFragment extends Fragment {
             return true;
         } catch (JSONException ex) {return false;}
     }
+
     private void writeToFile(String relativePath, String data) {
         String basePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/engrisuru/";
         File file = new File(basePath + relativePath);

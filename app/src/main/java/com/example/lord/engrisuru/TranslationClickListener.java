@@ -56,16 +56,12 @@ public class TranslationClickListener implements View.OnClickListener
 
         if (blocked)
                 return;
+        for (View v: translationsLayouts) if (v == null) return;
+
         blocked = true;
-//        if  (correctDrawable == null) {
-//            correctDrawable = ContextCompat.getDrawable(view.getContext(), R.drawable.translation_correct);
-//            incorrectDrawable = ContextCompat.getDrawable(view.getContext(), R.drawable.translation_incorrect);
-//        }
-//        Log.i("CLICKED", "CLICKEd");
         for (View v: translationsLayouts) {
             correctDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_correct);
             incorrectDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_incorrect);
-
             v.setClickable(false);
             v.setEnabled(false);
             TextView tv = v.findViewById(R.id.tvText);
@@ -78,3 +74,13 @@ public class TranslationClickListener implements View.OnClickListener
         }, 1500, TimeUnit.MILLISECONDS);
     }
 }
+
+//    private void hideKeyboard()
+//    {
+//        View view = this.getCurrentFocus();
+//        if (view != null) {
+//            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//        }
+//
+//    }

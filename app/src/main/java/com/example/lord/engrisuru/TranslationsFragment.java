@@ -7,13 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 
 public class TranslationsFragment extends Fragment {
@@ -42,9 +47,6 @@ public class TranslationsFragment extends Fragment {
                          Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_translations, container, false);
-//        rootView = getView();
-//        Log.e("CREACLY", "CREATED");
-//        setContentView(R.layout.fragment_translations);
         translationOptions = rootView.findViewById(R.id.possibleTranslations);
         String json = readJsonFromRes("defaultjson");
         db = new DataBase(json);
@@ -75,9 +77,10 @@ public class TranslationsFragment extends Fragment {
             }
             tcl.refreshButtons(getActivity());
         });
-
-    return rootView;
+        rootView.findViewById(R.id.add_trans_add_trans).setOnClickListener(this::addTranslation);
+        return rootView;
     }
+
     void nextTranslationTask()
     {
         TranslationTask tt = db.nextTranslation(n);
@@ -93,6 +96,7 @@ public class TranslationsFragment extends Fragment {
         });
 
     }
+
     String readJsonFromRes(String filename)
     {
         try {
@@ -107,8 +111,27 @@ public class TranslationsFragment extends Fragment {
             }
             String json = result.toString("UTF-8");
             return json;
-        } catch (Exception ex) {}
+        } catch (Exception ignored) {}
         return null;
+    }
+
+    void addTranslation(View view)
+    {
+        JSONObject dict = DataBase.currentDataBase.dict;
+        String word = ((EditText)rootView.findViewById(R.id.add_trans_trans)).getText().toString();
+        String translation = ((EditText)rootView.findViewById(R.id.add_trans_word)).getText().toString();
+        if (Objects.equals(word, "") || Objects.equals(translation, "")) return;
+        if (dict.has(word)) return;
+        try {
+            dict.put(word, translation);
+            DataBase.currentDataBase.updateDatabase();
+            Toast toast = Toast.makeText(rootView.getContext(), "Added!", Toast.LENGTH_SHORT);
+            toast.show();
+            ((EditText)rootView.findViewById(R.id.add_trans_trans)).getText().clear();
+            ((EditText)rootView.findViewById(R.id.add_trans_word)).getText().clear();
+        } catch (Exception ignored) {}
+
+
     }
 
 }

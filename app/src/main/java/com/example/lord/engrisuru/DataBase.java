@@ -31,6 +31,10 @@ public class DataBase {
         catch (JSONException ex) {
             Log.e("JSON", "Very bad JSON");
         }
+        updateDatabase();
+    }
+    void updateDatabase()
+    {
         int length = dict.length();
         keys = new String[length];
         values = new String[length];
@@ -47,7 +51,7 @@ public class DataBase {
         }
     }
 
-    public TranslationTask nextTranslation(int n)
+    TranslationTask nextTranslation(int n)
     {
         try {
             String word = getRandom(keys);

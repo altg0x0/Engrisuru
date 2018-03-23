@@ -8,21 +8,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.lord.engrisuru.TranslationsFragment"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    >
+    tools:context="com.example.lord.engrisuru.TranslationsFragment">
 
 
     <TextView
         android:id="@+id/askedWord"
-        android:layout_width="357dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
-        android:textSize="32sp"
         android:text="Paraphernalia"
+        android:textSize="32sp"
         app:layout_constraintBottom_toTopOf="@+id/possibleTranslations"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,10 +36,66 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/add_trans_splitter"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/askedWord" />
+
+
+    <LinearLayout
+        android:id="@+id/add_trans_splitter"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginStart="7dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/add_trans_add_trans"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/add_trans_word"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Word"
+            android:inputType="text"
+            app:layout_constraintBottom_toBottomOf="@+id/add_trans_splitter"
+            app:layout_constraintEnd_toStartOf="@+id/add_trans_trans"
+            app:layout_constraintHorizontal_bias="0.166"
+            app:layout_constraintStart_toStartOf="@+id/add_trans_splitter"
+            app:layout_constraintTop_toTopOf="@+id/add_trans_splitter"
+            tools:text="Megami" />
+
+        <EditText
+            android:id="@+id/add_trans_trans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Translation"
+            android:inputType="text"
+            app:layout_constraintBottom_toBottomOf="@+id/add_trans_splitter"
+            app:layout_constraintEnd_toEndOf="@+id/add_trans_splitter"
+            tools:text="Goddess" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/add_trans_add_trans"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Add translation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
 <!--</android.support.design.widget.CoordinatorLayout>-->

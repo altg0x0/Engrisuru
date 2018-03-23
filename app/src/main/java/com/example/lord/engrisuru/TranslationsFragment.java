@@ -48,7 +48,9 @@ public class TranslationsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_translations, container, false);
         translationOptions = rootView.findViewById(R.id.possibleTranslations);
-        String json = readJsonFromRes("defaultjson");
+        String json = !Utils.FS.fileExists("db.json") ?
+                readJsonFromRes("defaultjson") :
+                Utils.FS.readFromSandbox("db.json");
         db = new DataBase(json);
         DataBase.currentDataBase = db;
         final TranslationTask tt = db.nextTranslation(n);
@@ -125,8 +127,9 @@ public class TranslationsFragment extends Fragment {
         try {
             dict.put(word, translation);
             DataBase.currentDataBase.updateDatabase();
-            Toast toast = Toast.makeText(rootView.getContext(), "Added!", Toast.LENGTH_SHORT);
-            toast.show();
+//            Toast toast = Toast.makeText(rootView.getContext(), "Added!", Toast.LENGTH_SHORT);
+//            toast.show();
+            Utils.toast("Added!");
             ((EditText)rootView.findViewById(R.id.add_trans_trans)).getText().clear();
             ((EditText)rootView.findViewById(R.id.add_trans_word)).getText().clear();
         } catch (Exception ignored) {}

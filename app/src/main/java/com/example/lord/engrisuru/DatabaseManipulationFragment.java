@@ -56,10 +56,8 @@ public class DatabaseManipulationFragment extends Fragment {
             return;
         }
 
-        try {
-            FileOutputStream outputStreamWriter = new FileOutputStream(file);
+        try (FileOutputStream outputStreamWriter = new FileOutputStream(file)) {
             outputStreamWriter.write(data.getBytes());
-            outputStreamWriter.close();
         }
         catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());

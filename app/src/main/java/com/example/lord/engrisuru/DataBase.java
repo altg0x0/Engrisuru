@@ -49,6 +49,12 @@ public class DataBase {
             }
             catch (JSONException ex) {/*10 GOTO HELL;*/}
         }
+        try {
+            Utils.FS.writeToSandbox("db.json", dict.toString(4));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     TranslationTask nextTranslation(int n)

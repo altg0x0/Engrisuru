@@ -1,6 +1,7 @@
 package com.example.lord.engrisuru;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
@@ -14,9 +15,11 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mainActivity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -101,5 +104,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    static Context getAppContext()
+    {
+        return mainActivity.getApplicationContext();
     }
 }

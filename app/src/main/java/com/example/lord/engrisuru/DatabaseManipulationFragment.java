@@ -31,20 +31,31 @@ public class DatabaseManipulationFragment extends Fragment {
     {
         View rootView = inflater.inflate(R.layout.fragment_database_manipulation, container, false);
         rootView.findViewById(R.id.export_database).setOnClickListener(this::exportJSONDatabase);
+        rootView.findViewById(R.id.import_database).setOnClickListener(this::importJSONDatabase);
         return rootView;
     }
 
     public boolean exportJSONDatabase(View view)
     {
-        Log.e("123", "Trying to export..." );
+//        Log.e("123", "Trying to export..." );
         if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()))
             return false;
-
         try {
             String data = DataBase.currentDataBase.dict.toString(4);
             writeToFile("database.json", data);
             return true;
         } catch (JSONException ex) {return false;}
+    }
+
+    public void importJSONDatabase(View view) {
+        String json = Utils.FS.readFileFromSD("import.json");
+        if (json == null) {
+            Utils.toast("Import failed TT");
+            return;
+        }
+        DataBase.currentDataBase = new DataBase(json);
+        DataBase.currentDataBase.updateDatabase(true);
+        Utils.toast("Import successful!");
     }
 
     private void writeToFile(String relativePath, String data) {

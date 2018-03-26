@@ -119,22 +119,17 @@ public class TranslationsFragment extends Fragment {
 
     void addTranslation(View view)
     {
-        JSONObject dict = DataBase.currentDataBase.dict;
-        String word = ((EditText)rootView.findViewById(R.id.add_trans_trans)).getText().toString();
-        String translation = ((EditText)rootView.findViewById(R.id.add_trans_word)).getText().toString();
-        if (Objects.equals(word, "") || Objects.equals(translation, "")) return;
-        if (dict.has(word)) return;
+        DataBase db = DataBase.currentDataBase;
+        String word = ((EditText)rootView.findViewById(R.id.add_trans_word)).getText().toString();
+        String translation = ((EditText)rootView.findViewById(R.id.add_trans_trans)).getText().toString();
         try {
-            dict.put(word, translation);
-            DataBase.currentDataBase.updateDatabase();
-//            Toast toast = Toast.makeText(rootView.getContext(), "Added!", Toast.LENGTH_SHORT);
-//            toast.show();
+            boolean success = db.addWord(word, translation);
+            if (!success) return;
+            DataBase.currentDataBase.updateDatabase(true);
             Utils.toast("Added!");
             ((EditText)rootView.findViewById(R.id.add_trans_trans)).getText().clear();
             ((EditText)rootView.findViewById(R.id.add_trans_word)).getText().clear();
         } catch (Exception ignored) {}
-
-
     }
 
 }

@@ -59,19 +59,26 @@ public class TranslationClickListener implements View.OnClickListener
         for (View v: translationsLayouts) if (v == null) return;
 
         blocked = true;
+        boolean overallCorrect = false;
         for (View v: translationsLayouts) {
             correctDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_correct);
             incorrectDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_incorrect);
             v.setClickable(false);
             v.setEnabled(false);
             TextView tv = v.findViewById(R.id.tvText);
-            if (tv.getText() == tt.correctTranslation) v.setBackground(correctDrawable);
+            String trans = (String)tv.getText();
+            boolean correct = trans == tt.correctTranslation;
+            if (v == view) {
+                DataBase.currentDataBase.multiplyProb(tt.word, correct ? .5 : 2.);
+                overallCorrect |= correct;
+            }
+            if (correct) v.setBackground(correctDrawable);
             else if (v == view) v.setBackground(incorrectDrawable);
         }
         executor.schedule(() -> {
                 blocked = false;
                 afterClick.run();
-        }, 1500, TimeUnit.MILLISECONDS);
+        }, overallCorrect? 800 : 1700, TimeUnit.MILLISECONDS);
     }
 }
 

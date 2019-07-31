@@ -1,11 +1,9 @@
 package com.example.lord.engrisuru;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import androidx.core.content.ContextCompat;
+
 import android.view.View;
 import android.widget.TextView;
 
@@ -67,7 +65,7 @@ public class TranslationClickListener implements View.OnClickListener
             v.setEnabled(false);
             TextView tv = v.findViewById(R.id.tvText);
             String trans = (String)tv.getText();
-            boolean correct = trans == tt.correctTranslation;
+            boolean correct = trans.equals(tt.correctTranslation);
             if (v == view) {
                 DataBase.currentDataBase.multiplyProb(tt.word, correct ? .5 : 2.);
                 overallCorrect |= correct;

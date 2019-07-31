@@ -83,6 +83,11 @@ public class TranslationsFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     void nextTranslationTask()
     {
         TranslationTask tt = db.nextTranslation(n);

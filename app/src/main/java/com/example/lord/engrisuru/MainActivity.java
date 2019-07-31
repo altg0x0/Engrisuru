@@ -4,12 +4,12 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        if (savedInstanceState != null) return; // Avoid double fragment creation
         getFragmentManager().beginTransaction().add(R.id.content_frame, new TranslationsFragment()).commit();
 
     }
@@ -77,11 +78,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_databases) {
-            // Handle the camera action
             Log.i("ItemSelection", "Databases selected");
-//            NavigationView nv = findViewById(R.id.nav_view);
             FragmentManager fm = getFragmentManager();
-//            nv.
             fm.beginTransaction()
                     .replace(R.id.content_frame, new DatabaseManipulationFragment())
                     .commit();

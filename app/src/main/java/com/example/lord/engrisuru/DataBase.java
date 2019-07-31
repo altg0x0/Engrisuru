@@ -98,7 +98,7 @@ public class DataBase {
 
     private static List<String> pickNRandom(String[] src, int n)
     {
-        List<String> lst =Arrays.asList(src);
+        List<String> lst = Arrays.asList(src);
         List<String> copy = new LinkedList<String>(lst);
         Collections.shuffle(copy);
         return copy.subList(0, n);

@@ -37,12 +37,9 @@ public class TranslationClickListener implements View.OnClickListener
 
     void refreshButtons(Context context)
     {
-//        Log.e("1",Integer.toString(translationsLayouts.length) );
         for (View v: translationsLayouts) {
-//            if  (defaultDrawable == null)
             defaultDrawable = ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.translation);;
             v.setBackground(defaultDrawable);
-//            Log.e("wah", v.getBackground().toString()) ;
             v.setClickable(true);
             v.setEnabled(true);
             v.invalidate();
@@ -58,16 +55,16 @@ public class TranslationClickListener implements View.OnClickListener
 
         blocked = true;
         boolean overallCorrect = false;
+        correctDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_correct);
+        incorrectDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_incorrect);
         for (View v: translationsLayouts) {
-            correctDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_correct);
-            incorrectDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_incorrect);
             v.setClickable(false);
             v.setEnabled(false);
             TextView tv = v.findViewById(R.id.tvText);
             String trans = (String)tv.getText();
             boolean correct = trans.equals(tt.correctTranslation);
             if (v == view) {
-                DataBase.currentDataBase.multiplyProb(tt.word, correct ? .5 : 2.);
+                ((ReversibleFileTranslationModule)TranslationModule.selectedModule).multiplyProb(tt.word, correct ? .5 : 2.);
                 overallCorrect |= correct;
             }
             if (correct) v.setBackground(correctDrawable);

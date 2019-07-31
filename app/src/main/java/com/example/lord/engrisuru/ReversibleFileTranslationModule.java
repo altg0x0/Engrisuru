@@ -1,5 +1,7 @@
 package com.example.lord.engrisuru;
 
+import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
@@ -18,8 +20,7 @@ import java.util.Random;
  * Created by lord on 23/02/18.
  */
 
-public class DataBase {
-    public static DataBase currentDataBase;
+public class ReversibleFileTranslationModule extends TranslationModule {
 
     private String[] keys;
     private String[] values;
@@ -28,7 +29,7 @@ public class DataBase {
     private Random rnd = new Random();
     private EnumeratedDistribution<String> wordsWeighted;
 
-    DataBase(String json)
+    ReversibleFileTranslationModule(String json)
     {
         try {
             this.dict = new JSONObject(json);
@@ -38,7 +39,8 @@ public class DataBase {
         }
         updateDatabase();
     }
-    void updateDatabase(boolean... params)
+
+    boolean updateDatabase(boolean... params)
     {
         boolean save = (params.length >= 1) && params[0];
         int length = dict.length();
@@ -59,14 +61,32 @@ public class DataBase {
             catch (JSONException ex) {/*10 GOTO HELL;*/}
         }
         wordsWeighted = new EnumeratedDistribution<String>(Utils.zip(keys, weights));
-        if (!save) return;
+        if (!save) return false;
+        return writeToFile();
+    }
+
+    private boolean writeToFile()
+    {
         try {
-            Utils.FS.writeToSandbox("db.json", dict.toString(4));
+            return Utils.FS.writeToSandbox("db.json", dict.toString(4));
         } catch (JSONException e) {
             e.printStackTrace();
+            return false;
         }
-
     }
+
+    public boolean exportModule()
+    {
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()))
+            return false;
+        try {
+            String data = this.dict.toString(4);
+            Utils.FS.wrtiteFileToSD("export.json", data);
+            Utils.toast("Export successful!");
+            return true;
+        } catch (JSONException ex) {return false;}
+    }
+
     boolean addWord(String word, String trans) {
         if (Objects.equals(word, "") || Objects.equals(trans, "")) return false;
         JSONObject value = new JSONObject();
@@ -117,6 +137,15 @@ public class DataBase {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ReversibleFileTranslationModule initFromFile(Context appContext)
+    {
+        String json = !Utils.FS.fileExists("db.json") ?
+                Utils.FS.readJsonFromRes("defaultjson", appContext) :
+                Utils.FS.readFromSandbox("db.json");
+        ReversibleFileTranslationModule ret = new ReversibleFileTranslationModule(json);
+        return ret;
     }
 
 }

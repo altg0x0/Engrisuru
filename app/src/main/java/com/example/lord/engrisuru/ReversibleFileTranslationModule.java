@@ -2,6 +2,7 @@ package com.example.lord.engrisuru;
 
 import android.content.Context;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
@@ -25,7 +26,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     private String[] keys;
     private String[] values;
     private Double[] weights;
-    JSONObject dict;
+    private JSONObject dict;
     private Random rnd = new Random();
     private EnumeratedDistribution<String> wordsWeighted;
 
@@ -40,6 +41,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         updateDatabase();
     }
 
+    @SuppressWarnings("Convert2Diamond")
     boolean updateDatabase(boolean... params)
     {
         boolean save = (params.length >= 1) && params[0];
@@ -73,6 +75,13 @@ public class ReversibleFileTranslationModule extends TranslationModule {
             e.printStackTrace();
             return false;
         }
+    }
+
+    boolean modifyDataByAnswer(TranslationTask task)
+    {
+        boolean correct = task.isAnswerCorrect(task.answer);
+        multiplyProb(task.word, correct ? .5 : 2);
+        return correct;
     }
 
     public boolean exportModule()
@@ -109,6 +118,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
             translations.add(correctTranslation);
             Collections.shuffle(translations, rnd);
             Object[] objectArray = translations.toArray();
+            assert objectArray != null; //TODO get rid of the assertion
             String[] translationsArray = Arrays.copyOf(objectArray, objectArray.length, String[].class);
             return new TranslationTask(word, translationsArray, correctTranslation);
         }
@@ -116,15 +126,15 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         return null;
     }
 
-    private static List<String> pickNRandom(String[] src, int n)
+    private static List<String> pickNRandom(@NonNull String[] src, int n)
     {
         List<String> lst = Arrays.asList(src);
-        List<String> copy = new LinkedList<String>(lst);
+        List<String> copy = new LinkedList<>(lst);
         Collections.shuffle(copy);
         return copy.subList(0, n);
     }
 
-    void multiplyProb(String word, double coef) {
+    private void multiplyProb(String word, double coef) {
         try {
             JSONObject wordObj = dict.getJSONObject(word);
             wordObj.put("P", wordObj.getDouble("P") * coef);
@@ -139,13 +149,12 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         }
     }
 
-    public static ReversibleFileTranslationModule initFromFile(Context appContext)
+    static ReversibleFileTranslationModule initFromFile(Context appContext)
     {
         String json = !Utils.FS.fileExists("db.json") ?
                 Utils.FS.readJsonFromRes("defaultjson", appContext) :
                 Utils.FS.readFromSandbox("db.json");
-        ReversibleFileTranslationModule ret = new ReversibleFileTranslationModule(json);
-        return ret;
+        return new ReversibleFileTranslationModule(json);
     }
 
 }

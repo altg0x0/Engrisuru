@@ -38,7 +38,7 @@ public class TranslationClickListener implements View.OnClickListener
     void refreshButtons(Context context)
     {
         for (View v: translationsLayouts) {
-            defaultDrawable = ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.translation);;
+            defaultDrawable = ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.translation);
             v.setBackground(defaultDrawable);
             v.setClickable(true);
             v.setEnabled(true);
@@ -47,25 +47,25 @@ public class TranslationClickListener implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View view) {
-
+    public void onClick(View view)
+    {
         if (blocked)
                 return;
         for (View v: translationsLayouts) if (v == null) return;
 
         blocked = true;
-        boolean overallCorrect = false;
         correctDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_correct);
         incorrectDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_incorrect);
+        boolean overallCorrect = false;
         for (View v: translationsLayouts) {
             v.setClickable(false);
             v.setEnabled(false);
             TextView tv = v.findViewById(R.id.tvText);
-            String trans = (String)tv.getText();
-            boolean correct = trans.equals(tt.correctTranslation);
+            String userAnswer = (String)tv.getText();
+            boolean correct = tt.isAnswerCorrect(userAnswer); // Is the text in v the correct translation?
             if (v == view) {
-                ((ReversibleFileTranslationModule)TranslationModule.selectedModule).multiplyProb(tt.word, correct ? .5 : 2.);
-                overallCorrect |= correct;
+                tt.answer = userAnswer;
+                overallCorrect = TranslationModule.selectedModule.modifyDataByAnswer(tt);
             }
             if (correct) v.setBackground(correctDrawable);
             else if (v == view) v.setBackground(incorrectDrawable);

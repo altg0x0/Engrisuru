@@ -8,4 +8,6 @@ abstract class TranslationModule {
     abstract boolean updateDatabase(boolean... params); // Should return true if written successfully
 
     abstract boolean exportModule();
+
+    abstract boolean modifyDataByAnswer(TranslationTask task);
 }

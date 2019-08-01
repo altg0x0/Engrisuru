@@ -2,7 +2,6 @@ package com.example.lord.engrisuru;
 
 import android.content.Context;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
@@ -126,7 +125,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         return null;
     }
 
-    private static List<String> pickNRandom(@NonNull String[] src, int n)
+    private static List<String> pickNRandom(String[] src, int n)
     {
         List<String> lst = Arrays.asList(src);
         List<String> copy = new LinkedList<>(lst);

@@ -1,6 +1,5 @@
 package com.example.lord.engrisuru;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +9,8 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import androidx.fragment.app.Fragment;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,7 +22,7 @@ public class TranslationsFragment extends Fragment {
     private GridView translationOptions;
     private TextView askedWord;
     private String[] translations;
-    private static final int n = 16;
+    private static final int n = 10;
     private ArrayAdapter<String> adapter;
     TranslationClickListener tcl;
 
@@ -40,7 +39,7 @@ public class TranslationsFragment extends Fragment {
         translations = tt.translations;
         askedWord = rootView.findViewById(R.id.askedWord);
         askedWord.setText(tt.word);
-        ArrayList<String> translationsList = new ArrayList<String>(Arrays.asList(translations));
+        ArrayList<String> translationsList = new ArrayList<>(Arrays.asList(translations));
         adapter = new ArrayAdapter<>(getActivity(), R.layout.translation, R.id.tvText, translationsList);
         translationOptions.setAdapter(adapter);
         translationOptions.setNumColumns(2);

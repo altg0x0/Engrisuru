@@ -1,6 +1,5 @@
 package com.example.lord.engrisuru;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +9,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState != null) return; // Avoid double fragment creation
-        getFragmentManager().beginTransaction().add(R.id.content_frame, new TranslationsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TranslationsFragment()).commit();
 
     }
     @Override
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_databases) {
             Log.i("ItemSelection", "Databases selected");
-            FragmentManager fm = getFragmentManager();
+            FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction()
                     .replace(R.id.content_frame, new DatabaseManipulationFragment())
                     .commit();
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_translate) {
 
-            getFragmentManager()
+            getSupportFragmentManager()
                     .beginTransaction().
                     replace(R.id.content_frame, new TranslationsFragment()).
                     commit();

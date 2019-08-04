@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -26,7 +27,7 @@ public class TranslationClickListener implements View.OnClickListener
     private Drawable incorrectDrawable;
     private Drawable defaultDrawable;
 
-    private boolean blocked;
+    private boolean blocked = false;
 
     TranslationClickListener(TranslationTask tt_arg, View[] translationsLayouts_arg, Runnable afterClick_arg)
     {

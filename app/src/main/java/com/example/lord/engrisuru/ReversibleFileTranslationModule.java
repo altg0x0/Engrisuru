@@ -29,6 +29,8 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     private Random rnd = new Random();
     private EnumeratedDistribution<String> wordsWeighted;
 
+    private boolean reversed = false;
+
     ReversibleFileTranslationModule(String json)
     {
         try {
@@ -38,6 +40,11 @@ public class ReversibleFileTranslationModule extends TranslationModule {
             Log.e("JSON", "Very bad JSON");
         }
         updateDatabase();
+    }
+
+    private String valueByKey(String key) throws JSONException {
+        JSONObject wordObj = dict.getJSONObject(key);
+        return wordObj.getString("V");
     }
 
     @SuppressWarnings("Convert2Diamond")
@@ -54,9 +61,9 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         {
             try {
                 keys[i] = iterator.next();
-                JSONObject wordObj = dict.getJSONObject(keys[i]);
-                values[i] = (String) wordObj.get("V");
-                weights[i] = wordObj.getDouble("P");
+                JSONObject wordObj = dict.getJSONObject(keys[i]); // This is a repetition of valueByKey.
+                values[i] = (String) wordObj.get("V");            // However, getting json object here is necessary,
+                weights[i] = wordObj.getDouble("P");        // so it's ok
                 i++;
             }
             catch (JSONException ex) {/*10 GOTO HELL;*/}
@@ -111,18 +118,34 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         try {
             String word = wordsWeighted.sample();
             String correctTranslation = (String) dict.getJSONObject(word).get("V");
+            if (isReversed()) {
+                return new TranslationTask(correctTranslation, getReversedCandidates(n, word), word);
+            }
             List<String> translations = pickNRandom(values, n);
             if (!translations.remove(correctTranslation))
                 translations.remove(translations.size() - 1);
             translations.add(correctTranslation);
             Collections.shuffle(translations, rnd);
-            Object[] objectArray = translations.toArray();
-            assert objectArray != null; //TODO get rid of the assertion
-            String[] translationsArray = Arrays.copyOf(objectArray, objectArray.length, String[].class);
+            String[] translationsArray =  translations.toArray(new String[0]);
             return new TranslationTask(word, translationsArray, correctTranslation);
         }
         catch (JSONException ex) {/* FWCK YOU*/}
         return null;
+    }
+
+    private String[] getReversedCandidates(int n, String correctAnswer) throws JSONException {
+        String[] candidates = new String[n];
+        candidates[0] = correctAnswer;
+        Iterator<String> potentialCandidatesIterator = Arrays.asList(keys).iterator();
+        for (int i = 1; i < n;) {
+            String potentialCandidate = potentialCandidatesIterator.next();
+            if (valueByKey(potentialCandidate).equals(correctAnswer)) continue;
+            candidates[i] = potentialCandidate;
+            i++;
+        }
+        List<String> candidatesList = Arrays.asList(candidates);
+        Collections.shuffle(candidatesList);
+        return candidatesList.toArray(new String[0]);
     }
 
     private static List<String> pickNRandom(String[] src, int n)
@@ -134,6 +157,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     }
 
     private void multiplyProb(String word, double coef) {
+        if (isReversed()) return;
         try {
             JSONObject wordObj = dict.getJSONObject(word);
             wordObj.put("P", wordObj.getDouble("P") * coef);
@@ -156,4 +180,12 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         return new ReversibleFileTranslationModule(json);
     }
 
+    boolean isReversed() {
+        return reversed;
+    }
+
+    void setReversed(boolean value) {
+        if (this.reversed == value) return;
+        this.reversed = value;
+    }
 }

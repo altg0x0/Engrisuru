@@ -29,7 +29,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     private Random rnd = new Random();
     private EnumeratedDistribution<String> wordsWeighted;
 
-    private boolean reversed = false;
+    private static boolean reversed = true; //TODO save module settings
 
     ReversibleFileTranslationModule(String json)
     {
@@ -139,7 +139,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         Iterator<String> potentialCandidatesIterator = Arrays.asList(keys).iterator();
         for (int i = 1; i < n;) {
             String potentialCandidate = potentialCandidatesIterator.next();
-            if (valueByKey(potentialCandidate).equals(correctAnswer)) continue;
+            if (valueByKey(potentialCandidate).equals(valueByKey(correctAnswer))) continue;
             candidates[i] = potentialCandidate;
             i++;
         }

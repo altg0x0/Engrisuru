@@ -24,17 +24,11 @@ public class DatabaseManipulationFragment extends Fragment {
         initModuleSelectionSpinner(rootView);
         rootView.findViewById(R.id.export_database).setOnClickListener((__) -> exportJSONDatabase());
         rootView.findViewById(R.id.import_database).setOnClickListener((__) -> importJSONDatabase());
-        {
-            ReversibleFileTranslationModule currModule = (ReversibleFileTranslationModule)TranslationModule.selectedModule;
-            //((CheckBox)rootView.findViewById(R.id.reverseModuleCheckbox)).setChecked(currModule.isReversed());
-            rootView.findViewById(R.id.reversemModuleCheckbox).setOnClickListener(view ->
-                    currModule.setReversed(((CheckBox)view).isChecked()));
-
-        } // ROADMAP: use a nested fragment for module settings
+        getChildFragmentManager().beginTransaction().add(R.id.moduleSettingsFrame, new RFTModuleSettingsFragment()).commit();
         return rootView;
     }
 
-    void initModuleSelectionSpinner(View rootView)
+    private void initModuleSelectionSpinner(View rootView)
     {
         Spinner moduleSelectionSpinner = rootView.findViewById(R.id.moduleSelectionSpinner);
         final String[] moduleOptionsNames = new String[]{"Eng-Rus simple"};
@@ -43,6 +37,7 @@ public class DatabaseManipulationFragment extends Fragment {
         moduleSelectionSpinner.setAdapter(adapter);
     }
 
+    // ROADMAP: refactor these UI-unrelated functions
     boolean exportJSONDatabase()
     {
         return  TranslationModule.selectedModule.exportModule();

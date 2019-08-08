@@ -1,0 +1,29 @@
+package com.example.lord.engrisuru;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+class RFTModuleSettingsFragment extends ModuleSettingsFragment {
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
+        View rootView = inflater.inflate(R.layout.fragment_module_rft_settings, container, false);
+
+        {
+            ReversibleFileTranslationModule currModule = (ReversibleFileTranslationModule)TranslationModule.selectedModule;
+            ((CheckBox)rootView.findViewById(R.id.reverseModuleCheckbox)).setChecked(currModule.isReversed());
+            rootView.findViewById(R.id.reverseModuleCheckbox).setOnClickListener(view ->
+                    currModule.setReversed(((CheckBox)view).isChecked()));
+
+        } // TODO: bind settings to module instance
+
+
+        return rootView;
+    }
+}

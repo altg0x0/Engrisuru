@@ -29,7 +29,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     private Random rnd = new Random();
     private EnumeratedDistribution<String> wordsWeighted;
 
-    private static boolean reversed = true; //TODO save module settings
+    static RFTModuleSettings settings = new RFTModuleSettings(); //TODO load settings from file
 
     ReversibleFileTranslationModule(String json)
     {
@@ -181,11 +181,11 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     }
 
     boolean isReversed() {
-        return reversed;
+        return settings.reversed;
     }
 
     void setReversed(boolean value) {
-        if (this.reversed == value) return;
-        this.reversed = value;
+        if (this.settings.reversed == value) return;
+        this.settings.reversed = value;
     }
 }

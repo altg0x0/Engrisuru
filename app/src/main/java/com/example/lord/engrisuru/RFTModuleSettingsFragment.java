@@ -19,11 +19,17 @@ class RFTModuleSettingsFragment extends ModuleSettingsFragment {
             ReversibleFileTranslationModule currModule = (ReversibleFileTranslationModule)TranslationModule.selectedModule;
             ((CheckBox)rootView.findViewById(R.id.reverseModuleCheckbox)).setChecked(currModule.isReversed());
             rootView.findViewById(R.id.reverseModuleCheckbox).setOnClickListener(view ->
-                    currModule.setReversed(((CheckBox)view).isChecked()));
+                    currModule.settings = getSettings());
 
         } // TODO: bind settings to module instance
 
-
+        this.rootView = rootView;
         return rootView;
+    }
+
+    RFTModuleSettings getSettings() {
+        RFTModuleSettings ret = new RFTModuleSettings();
+        ret.reversed = ((CheckBox)rootView.findViewById(R.id.reverseModuleCheckbox)).isChecked();
+        return ret;
     }
 }

@@ -9,6 +9,9 @@ import android.widget.CheckBox;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 class RFTModuleSettingsFragment extends ModuleSettingsFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -19,7 +22,8 @@ class RFTModuleSettingsFragment extends ModuleSettingsFragment {
             ReversibleFileTranslationModule currModule = (ReversibleFileTranslationModule)TranslationModule.selectedModule;
             ((CheckBox)rootView.findViewById(R.id.reverseModuleCheckbox)).setChecked(currModule.isReversed());
             rootView.findViewById(R.id.reverseModuleCheckbox).setOnClickListener(view ->
-                    currModule.settings = getSettings());
+                    currModule.settings = getSettingsFromUI()
+            );
 
         } // TODO: bind settings to module instance
 
@@ -27,9 +31,19 @@ class RFTModuleSettingsFragment extends ModuleSettingsFragment {
         return rootView;
     }
 
-    RFTModuleSettings getSettings() {
-        RFTModuleSettings ret = new RFTModuleSettings();
-        ret.reversed = ((CheckBox)rootView.findViewById(R.id.reverseModuleCheckbox)).isChecked();
+    @Override
+    public void onPause() {
+        super.onPause();
+        TranslationModule.selectedModule.getSettings().writeToSandbox();
+    }
+
+    RFTModuleSettings getSettingsFromUI() {
+        RFTModuleSettings ret = null;
+        try {
+            ret = new RFTModuleSettings(new JSONObject(Utils.FS.readFromSandbox("settings.json")));
+            ret.reversed = ((CheckBox)rootView.findViewById(R.id.reverseModuleCheckbox)).isChecked();
+
+        } catch (JSONException ex) {/* TODO: change this mess*/}
         return ret;
     }
 }

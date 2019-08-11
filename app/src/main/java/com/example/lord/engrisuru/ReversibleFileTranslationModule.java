@@ -29,12 +29,13 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     private Random rnd = new Random();
     private EnumeratedDistribution<String> wordsWeighted;
 
-    static RFTModuleSettings settings = new RFTModuleSettings(); //TODO load settings from file
+    RFTModuleSettings settings = new RFTModuleSettings(); //TODO load settings from file
 
     ReversibleFileTranslationModule(String json)
     {
         try {
             this.dict = new JSONObject(json);
+            this.settings = // TODO: tidy this mess
         }
         catch (JSONException ex) {
             Log.e("JSON", "Very bad JSON");

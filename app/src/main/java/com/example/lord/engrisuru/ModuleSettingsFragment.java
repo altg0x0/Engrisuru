@@ -13,6 +13,6 @@ abstract class ModuleSettingsFragment extends Fragment {
 
     }
 
-    abstract ModuleSettings getSettings();
+    abstract ModuleSettings getSettingsFromUI();
 
 }

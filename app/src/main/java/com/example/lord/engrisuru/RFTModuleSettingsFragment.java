@@ -32,18 +32,16 @@ class RFTModuleSettingsFragment extends ModuleSettingsFragment {
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
         TranslationModule.selectedModule.getSettings().writeToSandbox();
     }
 
-    RFTModuleSettings getSettingsFromUI() {
-        RFTModuleSettings ret = null;
-        try {
-            ret = new RFTModuleSettings(new JSONObject(Utils.FS.readFromSandbox("settings.json")));
-            ret.reversed = ((CheckBox)rootView.findViewById(R.id.reverseModuleCheckbox)).isChecked();
-
-        } catch (JSONException ex) {/* TODO: change this mess*/}
+    RFTModuleSettings getSettingsFromUI()
+    {
+        RFTModuleSettings ret = new RFTModuleSettings();
+        ret.reversed = ((CheckBox)rootView.findViewById(R.id.reverseModuleCheckbox)).isChecked();
         return ret;
     }
 }

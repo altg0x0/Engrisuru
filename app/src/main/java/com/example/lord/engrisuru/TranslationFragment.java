@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class TranslationsFragment extends Fragment {
+public class TranslationFragment extends Fragment {
 
     private View rootView;
 

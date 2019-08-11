@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState != null) return; // Avoid double fragment creation
-        getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TranslationsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TranslationFragment()).commit();
 
     }
     @Override
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity
 
             getSupportFragmentManager()
                     .beginTransaction().
-                    replace(R.id.content_frame, new TranslationsFragment()).
+                    replace(R.id.content_frame, new TranslationFragment()).
                     commit();
         } else if (id == R.id.nav_manage) {
 

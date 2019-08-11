@@ -74,7 +74,7 @@ public class TranslationClickListener implements View.OnClickListener
         executor.schedule(() -> {
                 blocked = false;
                 afterClick.run();
-        }, overallCorrect? 800 : 1700, TimeUnit.MILLISECONDS);
+        }, overallCorrect? 80 : 170, TimeUnit.MILLISECONDS);
     }
 }
 

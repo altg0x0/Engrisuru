@@ -31,17 +31,23 @@ public class ReversibleFileTranslationModule extends TranslationModule {
 
     RFTModuleSettings settings = new RFTModuleSettings(); //TODO load settings from file
 
+    @Override
+    public RFTModuleSettings getSettings() {
+        return settings;
+    }
+
     ReversibleFileTranslationModule(String json)
     {
         try {
             this.dict = new JSONObject(json);
-            this.settings = // TODO: tidy this mess
+            this.settings = RFTModuleSettings.getSettingsFromFSWithDefault();
         }
         catch (JSONException ex) {
             Log.e("JSON", "Very bad JSON");
         }
         updateDatabase();
     }
+
 
     private String valueByKey(String key) throws JSONException {
         JSONObject wordObj = dict.getJSONObject(key);
@@ -97,7 +103,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
             return false;
         try {
             String data = this.dict.toString(4);
-            Utils.FS.wrtiteFileToSD("export.json", data);
+            Utils.FS.writeFileToSD("export.json", data);
             Utils.toast("Export successful!");
             return true;
         } catch (JSONException ex) {return false;}
@@ -175,7 +181,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
 
     static ReversibleFileTranslationModule initFromFile(Context appContext)
     {
-        String json = !Utils.FS.fileExists("db.json") ?
+        String json = !Utils.FS.fileExistsInSandbox("db.json") ?
                 Utils.FS.readJsonFromRes("defaultjson", appContext) :
                 Utils.FS.readFromSandbox("db.json");
         return new ReversibleFileTranslationModule(json);

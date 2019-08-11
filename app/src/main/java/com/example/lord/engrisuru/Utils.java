@@ -23,12 +23,14 @@ import java.util.List;
 
 final class Utils {
     static class FS {
-        static boolean fileExists(String filename) {
+        static boolean fileExistsInSandbox(String filename)
+        {
             File file = new File(MainActivity.getAppContext().getFilesDir(), filename);
-            return  file.exists();
+            return file.exists();
         }
 
-        static boolean writeToSandbox(String filename, String data) { // Returns true if written successfully
+        static boolean writeToSandbox(String filename, String data) // Returns true if written successfully
+        {
             File file = new File(MainActivity.getAppContext().getFilesDir(), filename);
             try (FileOutputStream outputStreamWriter = new FileOutputStream(file)) {
                 outputStreamWriter.write(data.getBytes());
@@ -39,31 +41,8 @@ final class Utils {
             }
         }
 
-//        static String readFromSandbox1(String filename) {
-//            File file = new File(MainActivity.getAppContext().getFilesDir(), filename);
-//            try (final InputStream inputStream = new FileInputStream(file)) {
-//
-//                final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//                final StringBuilder stringBuilder = new StringBuilder();
-//                boolean done = false;
-//                while (!done) {
-//                    final String line = reader.readLine();
-//                    done = (line == null);
-//                    if (line != null) {
-//                        stringBuilder.append(line);
-//                    }
-//                }
-//                reader.close();
-//                inputStream.close();
-//                return stringBuilder.toString();
-//            }
-//            catch (IOException e) {
-//                Log.e("Exception", "File write failed: " + e.toString());
-//            }
-//            return null;
-//        }
-
-        private static String readFile(File file) {
+        private static String readFile(File file)
+        {
             try (final InputStream inputStream = new FileInputStream(file)) {
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 final StringBuilder stringBuilder = new StringBuilder();
@@ -119,7 +98,7 @@ final class Utils {
             return readFile(file);
         }
 
-        static boolean wrtiteFileToSD(String relativePath, String data)
+        static boolean writeFileToSD(String relativePath, String data)
         {
             String basePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/engrisuru/";
             File file = new File(basePath + relativePath);

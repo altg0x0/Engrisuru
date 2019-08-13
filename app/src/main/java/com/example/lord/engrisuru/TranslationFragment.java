@@ -1,6 +1,8 @@
 package com.example.lord.engrisuru;
 
 import android.os.Bundle;
+import android.text.Layout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,9 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import de.mfietz.jhyphenator.HyphenationPattern;
+import de.mfietz.jhyphenator.Hyphenator;
 
 
 public class TranslationFragment extends Fragment {
@@ -55,9 +60,8 @@ public class TranslationFragment extends Fragment {
             for (int i = 0; i < n; i++) {
                 View child = translationOptions.getChildAt(i);
                 children[i] = child;
-                if (child != null)
-                    child.setOnClickListener(tcl);
-                else return;
+                if (child == null) return;
+                child.setOnClickListener(tcl);
             }
             tcl.refreshButtons(getActivity());
         });
@@ -74,6 +78,9 @@ public class TranslationFragment extends Fragment {
     {
         TranslationTask tt = TranslationModule.selectedModule.nextTranslation(n);
         translations = tt.translations;
+        for (int i = 0; i < translations.length; i++) {
+            translations[i] = TextUtils.join("\u00AD", Hyphenator.getInstance(HyphenationPattern.RU).hyphenate(translations[i])); // FIXME: only for testing!
+        }
         tcl.tt = tt;
         getActivity().runOnUiThread(()->
         {

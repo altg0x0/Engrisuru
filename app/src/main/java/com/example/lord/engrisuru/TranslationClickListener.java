@@ -63,7 +63,7 @@ public class TranslationClickListener implements View.OnClickListener
             v.setEnabled(false);
             TextView tv = v.findViewById(R.id.tvText);
             String userAnswer = (String)tv.getText();
-            boolean correct = tt.isAnswerCorrect(userAnswer); // Is the text in v the correct translation?
+            boolean correct = tt.isAnswerCorrect(userAnswer.replace("\u00AD","")); // Is the text in v the correct translation?
             if (v == view) {
                 tt.answer = userAnswer;
                 overallCorrect = TranslationModule.selectedModule.modifyDataByAnswer(tt);
@@ -74,7 +74,7 @@ public class TranslationClickListener implements View.OnClickListener
         executor.schedule(() -> {
                 blocked = false;
                 afterClick.run();
-        }, overallCorrect? 80 : 170, TimeUnit.MILLISECONDS);
+        }, overallCorrect? 800 : 1700, TimeUnit.MILLISECONDS);
     }
 }
 

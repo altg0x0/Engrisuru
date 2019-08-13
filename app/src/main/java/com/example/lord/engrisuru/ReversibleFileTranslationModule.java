@@ -143,7 +143,10 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     private String[] getReversedCandidates(int n, String correctAnswer) throws JSONException {
         String[] candidates = new String[n];
         candidates[0] = correctAnswer;
-        Iterator<String> potentialCandidatesIterator = Arrays.asList(keys).iterator();
+        List<String> lst = Arrays.asList(keys);
+        List<String> copy = new LinkedList<>(lst); // Need a copy for shuffling
+        Collections.shuffle(copy);
+        Iterator<String> potentialCandidatesIterator = copy.iterator();
         for (int i = 1; i < n;) {
             String potentialCandidate = potentialCandidatesIterator.next();
             if (valueByKey(potentialCandidate).equals(valueByKey(correctAnswer))) continue;

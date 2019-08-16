@@ -60,7 +60,7 @@ public class TranslationFragment extends Fragment {
         TranslationTask tt = TranslationModule.selectedModule.nextTranslation(n);
         translations = tt.translations;
         for (int i = 0; i < translations.length; i++) {
-            translations[i] = TextUtils.join("\u00AD", Hyphenator.getInstance(HyphenationPattern.RU).hyphenate(translations[i])); // FIXME: only for testing!
+            translations[i] = Utils.StringUtils.hyphenate(translations[i]);
         }
         tcl.tt = tt;
         getActivity().runOnUiThread(()->

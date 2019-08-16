@@ -77,7 +77,7 @@ public class TranslationItemClickListener implements AdapterView.OnItemClickList
                 blocked = false;
                 ((Activity)parent.getContext()).runOnUiThread(() -> refreshButtons(parent.getContext()));
                 afterClick.run();
-        }, overallCorrect? 800 : 1700, TimeUnit.MILLISECONDS);
+        }, (overallCorrect? 800 : 1700) / (MainActivity.LEARNING_MODE? 1 : 10), TimeUnit.MILLISECONDS); // Decreases delay if LEARNING_MODE is disabled
     }
 }
 

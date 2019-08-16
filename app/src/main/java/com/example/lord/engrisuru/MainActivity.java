@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static MainActivity mainActivity;
 
+    public static final boolean LEARNING_MODE = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mainActivity = this;

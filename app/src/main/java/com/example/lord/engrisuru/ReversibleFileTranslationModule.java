@@ -93,7 +93,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     boolean modifyDataByAnswer(TranslationTask task)
     {
         boolean correct = task.isAnswerCorrect(task.answer);
-        multiplyProb(task.word, correct ? .5 : 2);
+        if (MainActivity.LEARNING_MODE) multiplyProb(task.word, correct ? .5 : 2);
         return correct;
     }
 

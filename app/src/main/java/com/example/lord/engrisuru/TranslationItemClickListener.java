@@ -73,6 +73,7 @@ public class TranslationItemClickListener implements AdapterView.OnItemClickList
             if (correct) v.setBackground(correctDrawable);
             else if (v == view) v.setBackground(incorrectDrawable);
         }
+        //noinspection PointlessArithmeticExpression
         executor.schedule(() -> {
                 blocked = false;
                 ((Activity)parent.getContext()).runOnUiThread(() -> refreshButtons(parent.getContext()));

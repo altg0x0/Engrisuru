@@ -29,12 +29,14 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     private Random rnd = new Random();
     private EnumeratedDistribution<String> wordsWeighted;
 
-    RFTModuleSettings settings = new RFTModuleSettings(); //TODO load settings from file
+    private RFTModuleSettings settings = new RFTModuleSettings(); //TODO load settings from file
 
     @Override
     public RFTModuleSettings getSettings() {
         return settings;
     }
+    @Override
+    public void setSettings(ModuleSettings settingsValue) {this.settings = (RFTModuleSettings) settingsValue;}
 
     ReversibleFileTranslationModule(String json)
     {

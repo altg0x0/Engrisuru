@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+//        Utils.toast("OH MY");
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState != null) return; // Avoid double fragment creation
-        getSupportFragmentManager().beginTransaction().add(R.id.content_frame, new TranslationFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TranslationFragment()).commit();
 
     }
     @Override
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+//        if (true) return true;
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 

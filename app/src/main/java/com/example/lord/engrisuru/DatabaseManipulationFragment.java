@@ -33,7 +33,6 @@ public class DatabaseManipulationFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Utils.toast("Paused!");
         if (applySettingsOnPause) {
             TranslationModule.selectedModule.setSettings(settingsFragment.getSettingsFromUI());
             TranslationModule.selectedModule.getSettings().writeToSandbox();

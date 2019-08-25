@@ -35,7 +35,8 @@ public class TranslationFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_translations, container, false);
         translationOptions = rootView.findViewById(R.id.possibleTranslations);
         askedWord = rootView.findViewById(R.id.askedWord);
-        TranslationModule.selectedModule = ReversibleFileTranslationModule.initFromFile(this.getActivity());
+        if (TranslationModule.selectedModule == null)
+            TranslationModule.selectedModule = ReversibleFileTranslationModule.initFromFile(this.getActivity());
         adapter = new ArrayAdapter<>(getActivity(), R.layout.translation, R.id.tvText);
         translationOptions.setAdapter(adapter);
         translationOptions.setNumColumns(2);

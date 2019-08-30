@@ -35,7 +35,10 @@
         app:layout_constraintBottom_toTopOf="@+id/add_trans_splitter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/askedWord" />
+        app:layout_constraintTop_toBottomOf="@+id/askedWord"
+        android:listSelector="@android:color/transparent"
+        android:splitMotionEvents="false"
+        />
 
 
     <LinearLayout

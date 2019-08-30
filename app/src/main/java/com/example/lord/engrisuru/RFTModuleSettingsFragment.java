@@ -1,6 +1,7 @@
 package com.example.lord.engrisuru;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,6 @@ import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 class RFTModuleSettingsFragment extends ModuleSettingsFragment {
     @Override
@@ -22,7 +20,8 @@ class RFTModuleSettingsFragment extends ModuleSettingsFragment {
             ReversibleFileTranslationModule currModule = (ReversibleFileTranslationModule)TranslationModule.selectedModule;
             ((CheckBox)rootView.findViewById(R.id.reverseModuleCheckbox)).setChecked(currModule.isReversed());
             rootView.findViewById(R.id.reverseModuleCheckbox).setOnClickListener(view ->
-                    currModule.settings = getSettingsFromUI()
+                    currModule.setSettings(getSettingsFromUI())
+
             );
 
         } // TODO: bind settings to module instance
@@ -36,6 +35,7 @@ class RFTModuleSettingsFragment extends ModuleSettingsFragment {
     {
         super.onPause();
         TranslationModule.selectedModule.getSettings().writeToSandbox();
+        Log.i("onPause:", "Fire!");
     }
 
     RFTModuleSettings getSettingsFromUI()

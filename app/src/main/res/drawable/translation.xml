@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 <item android:state_pressed="true"
           android:drawable="@drawable/translation_pressed" /> <!-- pressed -->
-    <item android:state_focused="true"
-          android:drawable="@drawable/translation_focused" /> <!-- focused -->
+    <!--<item android:state_focused="true"-->
+          <!--android:drawable="@drawable/translation_focused" /> &lt;!&ndash; focused &ndash;&gt;-->
     <item android:drawable="@drawable/translation_normal" /> <!-- default -->
 </selector>

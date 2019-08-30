@@ -29,12 +29,14 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     private Random rnd = new Random();
     private EnumeratedDistribution<String> wordsWeighted;
 
-    RFTModuleSettings settings = new RFTModuleSettings(); //TODO load settings from file
+    private RFTModuleSettings settings = new RFTModuleSettings(); //TODO load settings from file
 
     @Override
     public RFTModuleSettings getSettings() {
         return settings;
     }
+    @Override
+    public void setSettings(ModuleSettings settingsValue) {this.settings = (RFTModuleSettings) settingsValue;}
 
     ReversibleFileTranslationModule(String json)
     {
@@ -93,7 +95,9 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     boolean modifyDataByAnswer(TranslationTask task)
     {
         boolean correct = task.isAnswerCorrect(task.answer);
-        multiplyProb(task.word, correct ? .5 : 2);
+        if (MainActivity.LEARNING_MODE) {
+            multiplyProb(isReversed()? task.correctTranslation : task.word, correct ? .5 : 4);
+        }
         return correct;
     }
 

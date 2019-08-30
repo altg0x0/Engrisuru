@@ -5,7 +5,7 @@ package com.example.lord.engrisuru;
  */
 
 class TranslationTask {
-    private String correctTranslation;
+    String correctTranslation;
     String word;
     String[] translations;
     String answer;
@@ -19,6 +19,6 @@ class TranslationTask {
 
     boolean isAnswerCorrect(String hypotheticalAnswer)
     {
-        return correctTranslation.equals(hypotheticalAnswer);
+        return correctTranslation.equals(hypotheticalAnswer.replace("\u00AD",""));
     }
 }

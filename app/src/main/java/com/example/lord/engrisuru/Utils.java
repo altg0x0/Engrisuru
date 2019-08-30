@@ -2,6 +2,7 @@ package com.example.lord.engrisuru;
 
 import android.content.Context;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import org.apache.commons.math3.util.Pair;
 import android.widget.Toast;
@@ -16,13 +17,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import de.mfietz.jhyphenator.HyphenationPattern;
+import de.mfietz.jhyphenator.Hyphenator;
 
 /**
  * Created by lord on 23/03/18.
  */
 
 final class Utils {
-    static class FS {
+    final static class FS {
         static boolean fileExistsInSandbox(String filename)
         {
             File file = new File(MainActivity.getAppContext().getFilesDir(), filename);
@@ -118,6 +123,46 @@ final class Utils {
         }
 
     }
+
+    final static class StringUtils {
+        private enum Language {
+            RU, EN, UNKNOWN
+        }
+
+        //region HYPHENATION
+        private static Pattern ignoredSymbols = Pattern.compile("[^\\p{Alpha}]"); // Normal java syntax is '''[^\p{IsAlphabetic}]''' but android is 'special'
+        private static Pattern patternRU = Pattern.compile("[а-яА-Я]+");
+        private static Pattern patternEN = Pattern.compile("[a-zA-Z]+");
+
+        static private Hyphenator getHyphenatorByLanguage(Language lang)
+        {
+            switch (lang) {
+                case RU:
+                    return Hyphenator.getInstance(HyphenationPattern.RU);
+                case EN:
+                default:
+                    return Hyphenator.getInstance(HyphenationPattern.CEN_US);
+            }
+        }
+
+        static Language detectLanguage(String text) {
+            text = ignoredSymbols.matcher(text).replaceAll("");
+            if (patternEN.matcher(text).matches()) return Language.EN;
+            if (patternRU.matcher(text).matches()) return Language.RU;
+            return Language.UNKNOWN;
+        }
+
+        static String hyphenate(String text) {
+            Language language = detectLanguage(text);
+            return hyphenate(text, language);
+        }
+        static String hyphenate(String text, Language language) {
+            return TextUtils.join("\u00AD", getHyphenatorByLanguage(language).hyphenate(text));
+        }
+        //endregion
+
+    }
+
 
     static void toast(String data)
     {

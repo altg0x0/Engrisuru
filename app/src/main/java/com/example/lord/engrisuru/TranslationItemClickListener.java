@@ -1,11 +1,13 @@
 package com.example.lord.engrisuru;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import java.util.concurrent.Executors;
@@ -16,10 +18,10 @@ import java.util.concurrent.TimeUnit;
  * Created by lord on 02/03/18.
  */
 
-public class TranslationClickListener implements View.OnClickListener
+public class TranslationItemClickListener implements AdapterView.OnItemClickListener
 {
-    TranslationTask tt;
-    View[] translationsLayouts;
+    TranslationTask tt = null;
+    private  View[] translationsLayouts;
     private Runnable afterClick;
     private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
@@ -29,9 +31,8 @@ public class TranslationClickListener implements View.OnClickListener
 
     private boolean blocked = false;
 
-    TranslationClickListener(TranslationTask tt_arg, View[] translationsLayouts_arg, Runnable afterClick_arg)
+    TranslationItemClickListener(View[] translationsLayouts_arg, Runnable afterClick_arg)
     {
-        this.tt = tt_arg;
         this.translationsLayouts =  translationsLayouts_arg;
         this.afterClick = afterClick_arg;
     }
@@ -41,22 +42,23 @@ public class TranslationClickListener implements View.OnClickListener
         for (View v: translationsLayouts) {
             defaultDrawable = ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.translation);
             v.setBackground(defaultDrawable);
-            v.setClickable(true);
-            v.setEnabled(true);
-            v.invalidate();
         }
     }
 
     @Override
-    public void onClick(View view)
+    public void onItemClick(AdapterView parent, View view, int position, long id)
     {
         if (blocked)
                 return;
-        for (View v: translationsLayouts) if (v == null) return;
+        translationsLayouts = new View[parent.getCount()];
+        for (int i = 0; i < translationsLayouts.length; i++) {
+            if (parent.getChildAt(i) == null) return;
+            translationsLayouts[i] = parent.getChildAt(i);
+        }
 
         blocked = true;
         correctDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_correct);
-        incorrectDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_incorrect);
+        incorrectDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_incorrect); // No more than one of each of these is used, so no cycle is needed
         boolean overallCorrect = false;
         for (View v: translationsLayouts) {
             v.setClickable(false);
@@ -71,10 +73,12 @@ public class TranslationClickListener implements View.OnClickListener
             if (correct) v.setBackground(correctDrawable);
             else if (v == view) v.setBackground(incorrectDrawable);
         }
+        //noinspection PointlessArithmeticExpression
         executor.schedule(() -> {
                 blocked = false;
+                ((Activity)parent.getContext()).runOnUiThread(() -> refreshButtons(parent.getContext()));
                 afterClick.run();
-        }, overallCorrect? 800 : 1700, TimeUnit.MILLISECONDS);
+        }, (overallCorrect? 800 : 1700) / (MainActivity.LEARNING_MODE? 1 : 10), TimeUnit.MILLISECONDS); // Decreases delay if LEARNING_MODE is disabled
     }
 }
 

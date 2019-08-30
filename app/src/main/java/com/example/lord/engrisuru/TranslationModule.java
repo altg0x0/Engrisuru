@@ -4,6 +4,7 @@ abstract class TranslationModule {
     static TranslationModule selectedModule;
 
     abstract ModuleSettings getSettings();
+    abstract void setSettings(ModuleSettings settings);
 
     abstract TranslationTask nextTranslation(int n);
 

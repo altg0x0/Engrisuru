@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 public class DatabaseManipulationFragment extends Fragment {
+    private ModuleSettingsFragment settingsFragment;
+    private boolean applySettingsOnPause = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,15 +25,25 @@ public class DatabaseManipulationFragment extends Fragment {
         initModuleSelectionSpinner(rootView);
         rootView.findViewById(R.id.export_database).setOnClickListener((__) -> exportJSONDatabase());
         rootView.findViewById(R.id.import_database).setOnClickListener((__) -> importJSONDatabase());
-        getChildFragmentManager().beginTransaction().add(R.id.moduleSettingsFrame, new RFTModuleSettingsFragment()).commit();
+        settingsFragment = new RFTModuleSettingsFragment();
+        getChildFragmentManager().beginTransaction().add(R.id.moduleSettingsFrame, settingsFragment).commit();
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (applySettingsOnPause) {
+            TranslationModule.selectedModule.setSettings(settingsFragment.getSettingsFromUI());
+            TranslationModule.selectedModule.getSettings().writeToSandbox();
+        }
     }
 
     private void initModuleSelectionSpinner(View rootView)
     {
         Spinner moduleSelectionSpinner = rootView.findViewById(R.id.moduleSelectionSpinner);
         final String[] moduleOptionsNames = new String[]{"Eng-Rus simple"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(),  android.R.layout.simple_spinner_item, moduleOptionsNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, moduleOptionsNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         moduleSelectionSpinner.setAdapter(adapter);
     }
@@ -50,6 +62,7 @@ public class DatabaseManipulationFragment extends Fragment {
         }
         TranslationModule.selectedModule = new ReversibleFileTranslationModule(json);
         TranslationModule.selectedModule.updateDatabase(true);
+        applySettingsOnPause = true;
         Utils.toast("Import successful!");
     }
 

@@ -1,8 +1,6 @@
 package com.example.lord.engrisuru;
 
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +11,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import de.mfietz.jhyphenator.HyphenationPattern;
-import de.mfietz.jhyphenator.Hyphenator;
+import com.example.lord.engrisuru.kanji_module.KanjiModule;
+import com.example.lord.engrisuru.rftm.ReversibleFileTranslationModule;
 
 
 public class TranslationFragment extends Fragment {
@@ -36,7 +34,8 @@ public class TranslationFragment extends Fragment {
         translationOptions = rootView.findViewById(R.id.possibleTranslations);
         askedWord = rootView.findViewById(R.id.askedWord);
         if (TranslationModule.selectedModule == null)
-            TranslationModule.selectedModule = ReversibleFileTranslationModule.initFromFile(this.getActivity());
+//            TranslationModule.selectedModule = ReversibleFileTranslationModule.initFromFile(this.getActivity());
+            TranslationModule.selectedModule = new KanjiModule();
         adapter = new ArrayAdapter<>(getActivity(), R.layout.translation, R.id.tvText);
         translationOptions.setAdapter(adapter);
         translationOptions.setNumColumns(2);

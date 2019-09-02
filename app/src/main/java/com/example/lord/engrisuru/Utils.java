@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -22,31 +23,27 @@ import java.util.regex.Pattern;
 import de.mfietz.jhyphenator.HyphenationPattern;
 import de.mfietz.jhyphenator.Hyphenator;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by lord on 23/03/18.
  */
 
-final class Utils {
-    final static class FS {
-        static boolean fileExistsInSandbox(String filename)
+public final class Utils {
+    public final static class FS {
+        public static boolean fileExistsInSandbox(String filename)
         {
             File file = new File(MainActivity.getAppContext().getFilesDir(), filename);
             return file.exists();
         }
 
-        static boolean writeToSandbox(String filename, String data) // Returns true if written successfully
+        public static boolean writeToSandbox(String filename, String data) // Returns true if written successfully
         {
             File file = new File(MainActivity.getAppContext().getFilesDir(), filename);
-            try (FileOutputStream outputStreamWriter = new FileOutputStream(file)) {
-                outputStreamWriter.write(data.getBytes());
-                return true;
-            } catch (IOException e) {
-                Log.e("Exception", "File write failed: " + e.toString());
-                return false;
-            }
+            return writeFile(file, data);
         }
 
-        private static String readFile(File file)
+        public static String readFile(File file)
         {
             try (final InputStream inputStream = new FileInputStream(file)) {
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -69,7 +66,7 @@ final class Utils {
             return null;
         }
 
-        static String readJsonFromRes(String filename, Context appContext)
+        public static String readStringFromRes(String filename, Context appContext)
         {
             try {
                 InputStream ins = appContext.getResources().openRawResource(
@@ -88,7 +85,7 @@ final class Utils {
         }
 
 
-        static String readFromSandbox(String filename)
+        public static String readFromSandbox(String filename)
         {
             File file = new File(MainActivity.getAppContext().getFilesDir(), filename);
             return readFile(file);
@@ -103,10 +100,9 @@ final class Utils {
             return readFile(file);
         }
 
-        static boolean writeFileToSD(String relativePath, String data)
+        public static boolean writeFile(File file, String data)
         {
-            String basePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/engrisuru/";
-            File file = new File(basePath + relativePath);
+
             File dir = new File(file.getParent());
             Log.e("PATH", file.getAbsolutePath());
             if (!dir.exists() && !dir.mkdirs()) {
@@ -120,6 +116,30 @@ final class Utils {
                 Log.e("Exception", "File write failed: " + e.toString());
                 return false;
             }
+        }
+
+        public static boolean writeFileToSD(String relativePath, String data) {
+            String basePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/engrisuru/";
+            File file = new File(basePath + relativePath);
+            return writeFile(file, data);
+        }
+
+        public static void copyFileUsingStream(InputStream is, File dest)  {
+            OutputStream os = null;
+            try {
+                os = new FileOutputStream(dest);
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = is.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
+                }
+                is.close();
+                os.close();
+            }
+            catch (IOException ex) {
+                Log.e(TAG, "copyFileUsingStream: ", ex);
+            }
+
         }
 
     }
@@ -164,12 +184,12 @@ final class Utils {
     }
 
 
-    static void toast(String data)
+    public static void toast(String data)
     {
         Toast toast = Toast.makeText(MainActivity.getAppContext(), data, Toast.LENGTH_SHORT);
         toast.show();
     }
-    static List<Pair<String, Double>> zip(String[] words, Double[] probabilities)
+    public static List<Pair<String, Double>> zip(String[] words, Double[] probabilities)
     {
         List<Pair<String, Double>> pairs = new LinkedList<>();
         int length = words.length;

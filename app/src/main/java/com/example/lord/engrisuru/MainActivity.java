@@ -3,6 +3,8 @@ package com.example.lord.engrisuru;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.example.lord.engrisuru.db.EngrisuruDatabase;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -10,9 +12,15 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -20,15 +28,23 @@ public class MainActivity extends AppCompatActivity
 
     public static final boolean LEARNING_MODE = true;
 
+    public static EngrisuruDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mainActivity = this;
         super.onCreate(savedInstanceState);
+        mainActivity = this;
+
+        final File dbFile = this.getDatabasePath("engrisurudb.sqlite");
+        Log.i("DB", dbFile.getAbsolutePath());
+        InputStream is = this.getApplicationContext().getResources().openRawResource(R.raw.kanjidic);
+        Utils.FS.copyFileUsingStream(is, dbFile);
+        db = Room.databaseBuilder(this.getApplicationContext(), EngrisuruDatabase.class, "engrisurudb.sqlite").allowMainThreadQueries().build();
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        Utils.toast("OH MY");
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

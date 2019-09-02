@@ -4,7 +4,7 @@ import android.view.View;
 
 import androidx.fragment.app.Fragment;
 
-abstract class ModuleSettingsFragment extends Fragment {
+public abstract class ModuleSettingsFragment extends Fragment {
     protected View rootView; // Is null before onCreateView(), beware.
 
     @Override
@@ -13,6 +13,6 @@ abstract class ModuleSettingsFragment extends Fragment {
 
     }
 
-    abstract ModuleSettings getSettingsFromUI();
+    protected abstract ModuleSettings getSettingsFromUI();
 
 }

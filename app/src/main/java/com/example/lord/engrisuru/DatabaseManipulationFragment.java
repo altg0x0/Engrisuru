@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.example.lord.engrisuru.rftm.RFTModuleSettingsFragment;
+import com.example.lord.engrisuru.rftm.ReversibleFileTranslationModule;
+
 public class DatabaseManipulationFragment extends Fragment {
     private ModuleSettingsFragment settingsFragment;
     private boolean applySettingsOnPause = false;

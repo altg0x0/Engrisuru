@@ -1,16 +1,16 @@
 package com.example.lord.engrisuru;
 
-abstract class TranslationModule {
-    static TranslationModule selectedModule;
+public abstract class TranslationModule {
+    public static TranslationModule selectedModule;
 
-    abstract ModuleSettings getSettings();
-    abstract void setSettings(ModuleSettings settings);
+    public abstract ModuleSettings getSettings();
+    public abstract void setSettings(ModuleSettings settings);
 
-    abstract TranslationTask nextTranslation(int n);
+    public abstract TranslationTask nextTranslation(int n);
 
-    abstract boolean updateDatabase(boolean... params); // Should return true if written successfully
+    public abstract boolean updateDatabase(boolean... params); // Should return true if written successfully
 
-    abstract boolean exportModule();
+    public abstract boolean exportModule();
 
-    abstract boolean modifyDataByAnswer(TranslationTask task);
+    public abstract boolean modifyDataByAnswer(TranslationTask task);
 }

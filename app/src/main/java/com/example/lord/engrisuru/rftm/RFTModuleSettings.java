@@ -1,4 +1,7 @@
-package com.example.lord.engrisuru;
+package com.example.lord.engrisuru.rftm;
+
+import com.example.lord.engrisuru.ModuleSettings;
+import com.example.lord.engrisuru.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +19,7 @@ class RFTModuleSettings extends ModuleSettings {
     RFTModuleSettings() {}
 
     @Override
-    JSONObject toJSONObject() {
+    public JSONObject toJSONObject() {
         JSONObject ret = null;
         try {
             ret = new JSONObject().

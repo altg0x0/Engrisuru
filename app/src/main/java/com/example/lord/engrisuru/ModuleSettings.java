@@ -3,10 +3,10 @@ package com.example.lord.engrisuru;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-abstract class ModuleSettings {
-    abstract JSONObject toJSONObject(); // Should only return settings, not timestamps or other meta-information
+public abstract class ModuleSettings {
+    public abstract JSONObject toJSONObject(); // Should only return settings, not timestamps or other meta-information
 
-    boolean writeToSandbox()
+    public boolean writeToSandbox()
     {
         return Utils.FS.writeToSandbox("settings.json", this.toString()); //TODO non-constant filename
     }

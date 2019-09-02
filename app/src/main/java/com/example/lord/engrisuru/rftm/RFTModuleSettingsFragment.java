@@ -1,4 +1,4 @@
-package com.example.lord.engrisuru;
+package com.example.lord.engrisuru.rftm;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,14 +10,18 @@ import android.widget.CheckBox;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-class RFTModuleSettingsFragment extends ModuleSettingsFragment {
+import com.example.lord.engrisuru.ModuleSettingsFragment;
+import com.example.lord.engrisuru.R;
+import com.example.lord.engrisuru.TranslationModule;
+
+public class RFTModuleSettingsFragment extends ModuleSettingsFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_module_rft_settings, container, false);
 
         {
-            ReversibleFileTranslationModule currModule = (ReversibleFileTranslationModule)TranslationModule.selectedModule;
+            ReversibleFileTranslationModule currModule = (ReversibleFileTranslationModule) TranslationModule.selectedModule;
             ((CheckBox)rootView.findViewById(R.id.reverseModuleCheckbox)).setChecked(currModule.isReversed());
             rootView.findViewById(R.id.reverseModuleCheckbox).setOnClickListener(view ->
                     currModule.setSettings(getSettingsFromUI())
@@ -38,7 +42,7 @@ class RFTModuleSettingsFragment extends ModuleSettingsFragment {
         Log.i("onPause:", "Fire!");
     }
 
-    RFTModuleSettings getSettingsFromUI()
+    protected RFTModuleSettings getSettingsFromUI()
     {
         RFTModuleSettings ret = new RFTModuleSettings();
         ret.reversed = ((CheckBox)rootView.findViewById(R.id.reverseModuleCheckbox)).isChecked();

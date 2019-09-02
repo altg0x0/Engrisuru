@@ -1,8 +1,14 @@
-package com.example.lord.engrisuru;
+package com.example.lord.engrisuru.rftm;
 
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+
+import com.example.lord.engrisuru.MainActivity;
+import com.example.lord.engrisuru.ModuleSettings;
+import com.example.lord.engrisuru.TranslationModule;
+import com.example.lord.engrisuru.TranslationTask;
+import com.example.lord.engrisuru.Utils;
 
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.json.JSONException;
@@ -38,7 +44,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     @Override
     public void setSettings(ModuleSettings settingsValue) {this.settings = (RFTModuleSettings) settingsValue;}
 
-    ReversibleFileTranslationModule(String json)
+    public ReversibleFileTranslationModule(String json)
     {
         try {
             this.dict = new JSONObject(json);
@@ -57,7 +63,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     }
 
     @SuppressWarnings("Convert2Diamond")
-    boolean updateDatabase(boolean... params)
+    public boolean updateDatabase(boolean... params)
     {
         boolean save = (params.length >= 1) && params[0];
         int length = dict.length();
@@ -92,7 +98,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         }
     }
 
-    boolean modifyDataByAnswer(TranslationTask task)
+    public boolean modifyDataByAnswer(TranslationTask task)
     {
         boolean correct = task.isAnswerCorrect(task.answer);
         if (MainActivity.LEARNING_MODE) {
@@ -113,7 +119,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         } catch (JSONException ex) {return false;}
     }
 
-    boolean addWord(String word, String trans) {
+    public boolean addWord(String word, String trans) {
         if (Objects.equals(word, "") || Objects.equals(trans, "")) return false;
         JSONObject value = new JSONObject();
         try {
@@ -124,7 +130,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         } catch (JSONException ex) {return false;}
     }
 
-    TranslationTask nextTranslation(int n)
+    public TranslationTask nextTranslation(int n)
     {
         try {
             String word = wordsWeighted.sample();
@@ -186,10 +192,10 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         }
     }
 
-    static ReversibleFileTranslationModule initFromFile(Context appContext)
+    public static ReversibleFileTranslationModule initFromFile(Context appContext)
     {
         String json = !Utils.FS.fileExistsInSandbox("db.json") ?
-                Utils.FS.readJsonFromRes("defaultjson", appContext) :
+                Utils.FS.readStringFromRes("defaultjson", appContext) :
                 Utils.FS.readFromSandbox("db.json");
         return new ReversibleFileTranslationModule(json);
     }

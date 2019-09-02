@@ -1,3 +1,4 @@
+# coding=utf-8
 import sqlite3
 try:
     import lxml.etree as etree
@@ -24,10 +25,13 @@ with open("kanjidic2.xml") as f:
 try:
     conn = sqlite3.connect("kanji.db")
     cur = conn.cursor()
+    # cur.execute(
+    #     """CREATE TABLE if not exists kanji ( \
+    #     character text primary key, grade integer, onyomiReadings text, kunyomiReadings text, englishMeanings text); \
+    #     """)
     cur.execute(
-        """CREATE TABLE if not exists kanji ( \
-        character text primary key, grade integer, onyomiReadings text, kunyomiReadings text, englishMeanings text); \
-        """)
+        """CREATE TABLE IF NOT EXISTS Kanji (`character` TEXT NOT NULL, `grade` INTEGER NOT NULL, \
+          `onyomiReadings` TEXT, `kunyomiReadings` TEXT, `englishMeanings` TEXT, `weight` REAL NOT NULL, PRIMARY KEY(`character`))""")
     # cur.execute("insert into kanji values ('1', 2, '1', '2', '3');")
 except sqlite3.Error:
     print("Problems with sqlite3 database detected.")
@@ -36,7 +40,7 @@ charactersNodes = xmlRoot.xpath("//character")
 inserts = []
 for i in charactersNodes:
     character = i.xpath(".//literal")[0].text  # literal is always present
-    grade = int(firstOrDefaultText(i.xpath(".//grade"), 10))
+    grade = int(firstOrDefaultText(i.xpath(".//grade"), 11))
     onyomiReadingsList = stringsByNodes(i.xpath(".//reading[@r_type='ja_on']")) or ["ソンザイシテイナイ"]
     kunyomiReadingsList = stringsByNodes(i.xpath(".//reading[@r_type='ja_kun']")) or ["そんざいしていない"]
     englishMeaningsList = stringsByNodes(i.xpath(".//meaning[not(@*)]"))
@@ -47,6 +51,6 @@ for i in charactersNodes:
          ','.join(kunyomiReadingsList),
          ','.join(englishMeaningsList),))
 # print(inserts[10:20])
-cur.executemany('insert into kanji values (?, ?, ?, ?, ?);', inserts)
+cur.executemany('insert into kanji values (?, ?, ?, ?, ?, 1.0);', inserts)
 conn.commit()
 cur.close()

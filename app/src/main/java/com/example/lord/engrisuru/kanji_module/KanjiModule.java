@@ -1,11 +1,5 @@
 package com.example.lord.engrisuru.kanji_module;
 
-import android.database.sqlite.SQLiteStatement;
-import android.util.Log;
-
-import androidx.sqlite.db.SupportSQLiteQuery;
-import androidx.sqlite.db.SupportSQLiteStatement;
-
 import com.example.lord.engrisuru.MainActivity;
 import com.example.lord.engrisuru.ModuleSettings;
 import com.example.lord.engrisuru.TranslationModule;
@@ -29,29 +23,18 @@ public class KanjiModule extends TranslationModule {
     }
 
     @Override
-    public TranslationTask nextTranslation(int n) {
-//        String[] answers = new String[]{
-//                "ひだり", "あめ", "き", "やす.む", "いし", "たま", "あざ", "もも"
-//        };
-
-        String[] answers = new String[8]; //TODO: no magic constant
-
-        SupportSQLiteStatement byteStatement = MainActivity.db.compileStatement("SELECT COUNT(*) FROM Kanji");
-        long bytes = byteStatement.simpleQueryForLong();
-        Log.i("DB", "nextTranslation: " + Long.toString(bytes));
-
-        Kanji[] allKanjiArray = MainActivity.db.kanjiDao().getKanjiByMaxGrade(1);
+    protected TranslationTask nextTranslation(int n) {
+        String[] answers = new String[n];
+        Kanji[] allKanjiArray = MainActivity.db.kanjiDao().getKanjiByMinMaxGrade(1,1);
         List<Kanji> kanji = Arrays.asList(allKanjiArray);
         Collections.shuffle(kanji);
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < n; i++) {
             answers[i] = allKanjiArray[i].englishMeanings[0]; //TODO: use weighted selection
         }
         int correctAnswerIndex = ThreadLocalRandom.current().nextInt(0, 8);
         String question = Character.toString(kanji.get(correctAnswerIndex).character);
         String correctAnswer = answers[correctAnswerIndex];
-
-        TranslationTask tt = new TranslationTask(question, answers, correctAnswer);
-        return tt;
+        return new TranslationTask(question, answers, correctAnswer);
     }
 
     @Override

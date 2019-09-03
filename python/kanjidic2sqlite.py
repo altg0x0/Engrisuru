@@ -32,6 +32,7 @@ try:
     cur.execute(
         """CREATE TABLE IF NOT EXISTS Kanji (`character` TEXT NOT NULL, `grade` INTEGER NOT NULL, \
           `onyomiReadings` TEXT, `kunyomiReadings` TEXT, `englishMeanings` TEXT, `weight` REAL NOT NULL, PRIMARY KEY(`character`))""")
+    cur.execute("""CREATE INDEX IF NOT EXISTS `index_Kanji_grade` ON `Kanji` (`grade`)""")
     # cur.execute("insert into kanji values ('1', 2, '1', '2', '3');")
 except sqlite3.Error:
     print("Problems with sqlite3 database detected.")

@@ -3,24 +3,22 @@ package com.example.lord.engrisuru;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-
-import com.example.lord.engrisuru.db.EngrisuruDatabase;
-import com.google.android.material.navigation.NavigationView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
-
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.room.Room;
+
+import com.example.lord.engrisuru.db.EngrisuruDatabase;
+import com.google.android.material.navigation.NavigationView;
+
 import java.io.File;
 import java.io.InputStream;
-import java.nio.file.Files;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,10 +34,12 @@ public class MainActivity extends AppCompatActivity
         mainActivity = this;
 
         final File dbFile = this.getDatabasePath("engrisurudb.sqlite");
-        Log.i("DB", dbFile.getAbsolutePath());
-        InputStream is = this.getApplicationContext().getResources().openRawResource(R.raw.kanjidic);
-        Utils.FS.copyFileUsingStream(is, dbFile);
-        db = Room.databaseBuilder(this.getApplicationContext(), EngrisuruDatabase.class, "engrisurudb.sqlite").allowMainThreadQueries().build();
+        if (!dbFile.exists()) {
+            Log.i("DB", dbFile.getAbsolutePath());
+            InputStream is = this.getApplicationContext().getResources().openRawResource(R.raw.kanjidic);
+            Utils.FS.copyFileUsingStream(is, dbFile);
+        }
+        db = Room.databaseBuilder(this.getApplicationContext(), EngrisuruDatabase.class, "engrisurudb.sqlite").build();
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
     }
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

@@ -3,12 +3,11 @@ package com.example.lord.engrisuru;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import androidx.core.content.ContextCompat;
-
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -68,7 +67,7 @@ public class TranslationItemClickListener implements AdapterView.OnItemClickList
             boolean correct = tt.isAnswerCorrect(userAnswer.replace("\u00AD","")); // Is the text in v the correct translation?
             if (v == view) {
                 tt.answer = userAnswer;
-                overallCorrect = TranslationModule.selectedModule.modifyDataByAnswer(tt);
+                overallCorrect = correct;
             }
             if (correct) v.setBackground(correctDrawable);
             else if (v == view) v.setBackground(incorrectDrawable);
@@ -82,12 +81,3 @@ public class TranslationItemClickListener implements AdapterView.OnItemClickList
     }
 }
 
-//    private void hideKeyboard()
-//    {
-//        View view = this.getCurrentFocus();
-//        if (view != null) {
-//            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-//            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//        }
-//
-//    }

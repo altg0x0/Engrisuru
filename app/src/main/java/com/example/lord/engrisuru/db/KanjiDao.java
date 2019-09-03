@@ -10,10 +10,13 @@ import com.example.lord.engrisuru.japanese.Kanji;
 @Dao
 public interface KanjiDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    public void insertKanji(Kanji kanji);
+    void insertKanji(Kanji kanji);
 
     @Query("select * from Kanji where grade <= :maxGrade;")
-    public Kanji[] getKanjiByMaxGrade(int maxGrade);
+    Kanji[] getKanjiByMaxGrade(int maxGrade);
+
+    @Query("select * from Kanji where grade between :minGrade and :maxGrade;")
+    Kanji[] getKanjiByMinMaxGrade(int minGrade, int maxGrade);
 
     @Query("SELECT COUNT(*) FROM Kanji")
     int getDataCount();

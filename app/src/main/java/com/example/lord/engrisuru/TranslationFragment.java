@@ -24,7 +24,7 @@ public class TranslationFragment extends Fragment {
     private String[] translations;
     private static final int n = 10;
     private ArrayAdapter<String> adapter;
-    TranslationItemClickListener tcl;
+    private TranslationItemClickListener tcl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +57,7 @@ public class TranslationFragment extends Fragment {
 
     private void nextTranslationTask()
     {
-        TranslationTask tt = TranslationModule.selectedModule.nextTranslation(n);
+        TranslationTask tt = TranslationModule.selectedModule.getBufferedTranslationTask(n);
         translations = tt.translations;
         for (int i = 0; i < translations.length; i++) {
             translations[i] = Utils.StringUtils.hyphenate(translations[i]);

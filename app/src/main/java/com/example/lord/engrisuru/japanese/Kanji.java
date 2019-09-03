@@ -2,11 +2,10 @@ package com.example.lord.engrisuru.japanese;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.example.lord.engrisuru.db.WeightedStringArray;
-
-@Entity
+@Entity(indices = @Index(value = "grade"))
 public class Kanji {
     @PrimaryKey
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT)

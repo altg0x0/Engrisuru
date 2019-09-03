@@ -44,3 +44,9 @@ dependencies {
 }
 
 
+task buildDatabase(type: Exec) {
+    workingDir '../python'
+    commandLine 'python3', './kanjidic2sqlite.py'
+}
+
+preBuild.dependsOn buildDatabase

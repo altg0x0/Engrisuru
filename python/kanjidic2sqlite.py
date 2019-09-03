@@ -1,5 +1,6 @@
 # coding=utf-8
 import sqlite3
+import shutil
 try:
     import lxml.etree as etree
 except ImportError:
@@ -19,6 +20,9 @@ def stringsByNodes(nodesList):
 if not Path("kanjidic2.xml").is_file():
     print("Kanjidic xml file not found in the working directory.")
     exit(2)
+if Path("kanji.db").is_file():
+    print("Kanji sqlite database already exists. Exiting...")
+    exit(0)
 with open("kanjidic2.xml") as f:
     xmlRoot = etree.parse(f)
     print("Kanjidic file parsed successfully!")
@@ -55,3 +59,4 @@ for i in charactersNodes:
 cur.executemany('insert into kanji values (?, ?, ?, ?, ?, 1.0);', inserts)
 conn.commit()
 cur.close()
+shutil.copy("kanji.db", "../app/src/main/res/raw/kanjidic.db")

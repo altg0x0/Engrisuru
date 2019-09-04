@@ -1,5 +1,10 @@
 package com.example.lord.engrisuru.kanji_module;
 
+import android.util.Log;
+
+import androidx.sqlite.db.SimpleSQLiteQuery;
+import androidx.sqlite.db.SupportSQLiteQuery;
+
 import com.example.lord.engrisuru.MainActivity;
 import com.example.lord.engrisuru.ModuleSettings;
 import com.example.lord.engrisuru.TranslationModule;
@@ -25,7 +30,13 @@ public class KanjiModule extends TranslationModule {
     @Override
     protected TranslationTask nextTranslation(int n) {
         String[] answers = new String[n];
-        Kanji[] allKanjiArray = MainActivity.db.kanjiDao().getKanjiByMinMaxGrade(1,1);
+//        long nanos = System.nanoTime();
+//        MainActivity.db.query(new SimpleSQLiteQuery("select * from Kanji"));
+//        long bananos = System.nanoTime();
+//        Log.i("STOPWATCH", Long.toString((bananos - nanos) / 1000));
+
+
+        Kanji[] allKanjiArray = MainActivity.db.kanjiDao().getKanjiByMinMaxGrade(1,11);
         List<Kanji> kanji = Arrays.asList(allKanjiArray);
         Collections.shuffle(kanji);
         for (int i = 0; i < n; i++) {

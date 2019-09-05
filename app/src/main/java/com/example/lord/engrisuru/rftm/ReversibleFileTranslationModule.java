@@ -98,13 +98,12 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         }
     }
 
-    public boolean modifyDataByAnswer(TranslationTask task)
+    public void modifyDataByAnswer(TranslationTask task)
     {
         boolean correct = task.isAnswerCorrect(task.answer);
         if (MainActivity.LEARNING_MODE) {
             multiplyProb(isReversed()? task.correctTranslation : task.word, correct ? .5 : 4);
         }
-        return correct;
     }
 
     public boolean exportModule()

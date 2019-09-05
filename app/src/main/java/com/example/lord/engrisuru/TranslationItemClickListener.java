@@ -36,7 +36,7 @@ public class TranslationItemClickListener implements AdapterView.OnItemClickList
         this.afterClick = afterClick_arg;
     }
 
-    void refreshButtons(Context context)
+    private void refreshButtons(Context context)
     {
         for (View v: translationsLayouts) {
             defaultDrawable = ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.translation);
@@ -63,11 +63,12 @@ public class TranslationItemClickListener implements AdapterView.OnItemClickList
             v.setClickable(false);
             v.setEnabled(false);
             TextView tv = v.findViewById(R.id.tvText);
-            String userAnswer = (String)tv.getText();
-            boolean correct = tt.isAnswerCorrect(userAnswer.replace("\u00AD","")); // Is the text in v the correct translation?
+            String userAnswer = ((String)tv.getText()).replace("\u00AD","");
+            boolean correct = tt.isAnswerCorrect(userAnswer); // Is the text in v the correct translation?
             if (v == view) {
                 tt.answer = userAnswer;
                 overallCorrect = correct;
+                TranslationModule.selectedModule.modifyDataByAnswer(tt);
             }
             if (correct) v.setBackground(correctDrawable);
             else if (v == view) v.setBackground(incorrectDrawable);

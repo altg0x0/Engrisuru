@@ -11,7 +11,7 @@ public abstract class TranslationModule {
     public static TranslationModule selectedModule;
 
     private Future<TranslationTask> buffered;
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    protected ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public abstract ModuleSettings getSettings();
     public abstract void setSettings(ModuleSettings settings);
@@ -22,7 +22,7 @@ public abstract class TranslationModule {
 
     public abstract boolean exportModule();
 
-    public abstract boolean modifyDataByAnswer(TranslationTask task);
+    public abstract void modifyDataByAnswer(TranslationTask task);
 
     public TranslationTask getBufferedTranslationTask(int n) {
         if (buffered == null)

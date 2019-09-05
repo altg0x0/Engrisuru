@@ -19,6 +19,6 @@ public class TranslationTask {
 
     public boolean isAnswerCorrect(String hypotheticalAnswer)
     {
-        return correctTranslation.equals(hypotheticalAnswer.replace("\u00AD",""));
+        return correctTranslation.equals(hypotheticalAnswer);
     }
 }

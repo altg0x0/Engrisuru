@@ -1,22 +1,22 @@
-package com.example.lord.engrisuru.rftm;
+package com.example.lord.engrisuru.rft_module;
 
-import com.example.lord.engrisuru.ModuleSettings;
 import com.example.lord.engrisuru.Utils;
+import com.example.lord.engrisuru.abstract_module.ModuleSettings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class RFTModuleSettings extends ModuleSettings {
+public class RFTModuleSettings extends ModuleSettings {
     boolean reversed = false;
 
-    RFTModuleSettings(JSONObject json) // With meta-information
+    public RFTModuleSettings(JSONObject json) // With meta-information
     {
         try {
             reversed = json.getJSONObject("settings").getBoolean("reversed");
         } catch (JSONException ex) {/* ROADMAP: do something with this exception*/}
     }
 
-    RFTModuleSettings() {}
+    public RFTModuleSettings() {}
 
     @Override
     public JSONObject toJSONObject() {

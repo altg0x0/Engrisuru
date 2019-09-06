@@ -1,4 +1,4 @@
-package com.example.lord.engrisuru;
+package com.example.lord.engrisuru.abstract_module;
 
 /**
  * Created by lord on 23/02/18.
@@ -7,7 +7,7 @@ package com.example.lord.engrisuru;
 public class TranslationTask {
     public String correctTranslation;
     public String word;
-    String[] translations;
+    public String[] translations;
     public String answer;
 
     public TranslationTask(String word_arg, String[] translations_arg, String correctTranslation_arg)

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.appyvet.materialrangebar.RangeBar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/kanji_grade_range_picker"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:mrb_tickStart="1"
+        app:mrb_tickEnd="11"
+        app:mrb_tickInterval="1"
+    />
+</LinearLayout>

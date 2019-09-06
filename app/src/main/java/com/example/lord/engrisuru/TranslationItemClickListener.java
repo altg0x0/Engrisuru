@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.lord.engrisuru.abstract_module.TranslationModule;
+import com.example.lord.engrisuru.abstract_module.TranslationTask;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

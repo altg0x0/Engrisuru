@@ -1,14 +1,14 @@
-package com.example.lord.engrisuru.rftm;
+package com.example.lord.engrisuru.rft_module;
 
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
 import com.example.lord.engrisuru.MainActivity;
-import com.example.lord.engrisuru.ModuleSettings;
-import com.example.lord.engrisuru.TranslationModule;
-import com.example.lord.engrisuru.TranslationTask;
 import com.example.lord.engrisuru.Utils;
+import com.example.lord.engrisuru.abstract_module.ModuleSettings;
+import com.example.lord.engrisuru.abstract_module.TranslationModule;
+import com.example.lord.engrisuru.abstract_module.TranslationTask;
 
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.json.JSONException;
@@ -42,7 +42,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         return settings;
     }
     @Override
-    public void setSettings(ModuleSettings settingsValue) {this.settings = (RFTModuleSettings) settingsValue;}
+    protected void applySettings(ModuleSettings settingsValue) {this.settings = (RFTModuleSettings) settingsValue;}
 
     public ReversibleFileTranslationModule(String json)
     {

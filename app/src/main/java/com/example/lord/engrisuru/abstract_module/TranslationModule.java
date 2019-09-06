@@ -1,4 +1,4 @@
-package com.example.lord.engrisuru;
+package com.example.lord.engrisuru.abstract_module;
 
 import android.util.Log;
 
@@ -14,7 +14,13 @@ public abstract class TranslationModule {
     protected ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public abstract ModuleSettings getSettings();
-    public abstract void setSettings(ModuleSettings settings);
+
+    public void setSettings(ModuleSettings settings) {
+        applySettings(settings);
+        buffered = null;
+    }
+
+    protected abstract void applySettings(ModuleSettings settings);
 
     protected abstract TranslationTask nextTranslation(int n);
 
@@ -33,7 +39,7 @@ public abstract class TranslationModule {
             return ret;
         }
         catch (Exception ex){
-            Log.i("TranslationModule", "getBufferedTranslationTask: ", ex);
+            Log.e("TranslationModule", "getBufferedTranslationTask: ", ex);
         }
         return null; // Should never happen
     }

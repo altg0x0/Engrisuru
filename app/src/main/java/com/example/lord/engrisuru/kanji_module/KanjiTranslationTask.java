@@ -1,6 +1,6 @@
 package com.example.lord.engrisuru.kanji_module;
 
-import com.example.lord.engrisuru.TranslationTask;
+import com.example.lord.engrisuru.abstract_module.TranslationTask;
 import com.example.lord.engrisuru.japanese.Kanji;
 
 class KanjiTranslationTask extends TranslationTask {

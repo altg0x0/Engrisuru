@@ -1,6 +1,5 @@
 package com.example.lord.engrisuru;
 
-import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +7,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.example.lord.engrisuru.rftm.RFTModuleSettingsFragment;
-import com.example.lord.engrisuru.rftm.ReversibleFileTranslationModule;
+import androidx.fragment.app.Fragment;
+
+import com.example.lord.engrisuru.abstract_module.TranslationModule;
+import com.example.lord.engrisuru.abstract_module.ui.ModuleSettingsFragment;
+import com.example.lord.engrisuru.kanji_module.KanjiModuleSettingsFragment;
+import com.example.lord.engrisuru.rft_module.ReversibleFileTranslationModule;
 
 public class DatabaseManipulationFragment extends Fragment {
     private ModuleSettingsFragment settingsFragment;
-    private boolean applySettingsOnPause = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,8 @@ public class DatabaseManipulationFragment extends Fragment {
         initModuleSelectionSpinner(rootView);
         rootView.findViewById(R.id.export_database).setOnClickListener((__) -> exportJSONDatabase());
         rootView.findViewById(R.id.import_database).setOnClickListener((__) -> importJSONDatabase());
-        settingsFragment = new RFTModuleSettingsFragment();
+//        settingsFragment = new RFTModuleSettingsFragment();
+        settingsFragment = new KanjiModuleSettingsFragment();
         getChildFragmentManager().beginTransaction().add(R.id.moduleSettingsFrame, settingsFragment).commit();
         return rootView;
     }
@@ -36,10 +39,9 @@ public class DatabaseManipulationFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (applySettingsOnPause) {
-            TranslationModule.selectedModule.setSettings(settingsFragment.getSettingsFromUI());
-            TranslationModule.selectedModule.getSettings().writeToSandbox();
-        }
+        TranslationModule.selectedModule.setSettings(settingsFragment.getSettingsFromUI());
+        TranslationModule.selectedModule.getSettings().writeToSandbox();
+        Utils.toast("Fired!");
     }
 
     private void initModuleSelectionSpinner(View rootView)
@@ -52,12 +54,12 @@ public class DatabaseManipulationFragment extends Fragment {
     }
 
     // ROADMAP: refactor these UI-unrelated functions
-    boolean exportJSONDatabase()
+    private boolean exportJSONDatabase()
     {
         return  TranslationModule.selectedModule.exportModule();
     }
 
-    void importJSONDatabase() {
+    private void importJSONDatabase() {
         String json = Utils.FS.readFileFromSD("import.json");
         if (json == null) {
             Utils.toast("Import failed TT");
@@ -65,7 +67,6 @@ public class DatabaseManipulationFragment extends Fragment {
         }
         TranslationModule.selectedModule = new ReversibleFileTranslationModule(json);
         TranslationModule.selectedModule.updateDatabase(true);
-        applySettingsOnPause = true;
         Utils.toast("Import successful!");
     }
 

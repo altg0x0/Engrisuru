@@ -1,9 +1,9 @@
 package com.example.lord.engrisuru.kanji_module;
 
 import com.example.lord.engrisuru.MainActivity;
-import com.example.lord.engrisuru.ModuleSettings;
-import com.example.lord.engrisuru.TranslationModule;
-import com.example.lord.engrisuru.TranslationTask;
+import com.example.lord.engrisuru.abstract_module.ModuleSettings;
+import com.example.lord.engrisuru.abstract_module.TranslationModule;
+import com.example.lord.engrisuru.abstract_module.TranslationTask;
 import com.example.lord.engrisuru.japanese.Kanji;
 
 import java.util.Arrays;
@@ -11,23 +11,24 @@ import java.util.Collections;
 import java.util.List;
 
 public class KanjiModule extends TranslationModule {
+    private KanjiModuleSettings _settings;
+
     @Override
-    public ModuleSettings getSettings() {
-        return null;
+    public KanjiModuleSettings getSettings() {
+        return _settings;
     }
 
     @Override
-    public void setSettings(ModuleSettings settings) {
-
+    public void applySettings(ModuleSettings settings) {
+        _settings = (KanjiModuleSettings) settings;
     }
 
     @Override
     protected TranslationTask nextTranslation(int n) {
         String[] answers = new String[n];
-
-        Kanji[] kanjiArray = MainActivity.db.kanjiDao().getKanjiByMinMaxGrade(1,1, n);
+        Kanji[] kanjiArray = MainActivity.db.kanjiDao().getKanjiByMinMaxGrade(getSettings().minGrade, getSettings().maxGrade, n);
         for (int i = 0; i < n; i++) {
-            answers[i] = kanjiArray[i].englishMeanings[0]; //TODO: use weighted selection
+            answers[i] = kanjiArray[i].kunyomiReadings[0];
         }
         Kanji askedKanji = kanjiArray[0];
         List<String> answersList = Arrays.asList(answers);
@@ -51,7 +52,7 @@ public class KanjiModule extends TranslationModule {
     public void modifyDataByAnswer(TranslationTask task) {
         boolean correct = task.isAnswerCorrect(task.answer);
         Kanji askedKanji = ((KanjiTranslationTask)task).askedKanji;
-        askedKanji.weight *= correct? .6 : 2;
+        askedKanji.weight *= correct? .6 : 1.2;
 //        Log.i(TAG, "modifyDataByAnswer: new weight is" + askedKanji.weight);
         executor.execute(() -> MainActivity.db.kanjiDao().updateWeight(askedKanji));
     }

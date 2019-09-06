@@ -4,8 +4,9 @@ import android.content.Context;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
-import org.apache.commons.math3.util.Pair;
 import android.widget.Toast;
+
+import org.apache.commons.math3.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -104,7 +105,6 @@ public final class Utils {
         {
 
             File dir = new File(file.getParent());
-            Log.e("PATH", file.getAbsolutePath());
             if (!dir.exists() && !dir.mkdirs()) {
                 return false;
             }

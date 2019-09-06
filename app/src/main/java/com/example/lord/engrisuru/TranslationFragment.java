@@ -11,8 +11,11 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.lord.engrisuru.abstract_module.ModuleSettings;
+import com.example.lord.engrisuru.abstract_module.TranslationModule;
+import com.example.lord.engrisuru.abstract_module.TranslationTask;
 import com.example.lord.engrisuru.kanji_module.KanjiModule;
-import com.example.lord.engrisuru.rftm.ReversibleFileTranslationModule;
+import com.example.lord.engrisuru.rft_module.ReversibleFileTranslationModule;
 
 
 public class TranslationFragment extends Fragment {
@@ -36,6 +39,7 @@ public class TranslationFragment extends Fragment {
         if (TranslationModule.selectedModule == null)
 //            TranslationModule.selectedModule = ReversibleFileTranslationModule.initFromFile(this.getActivity());
             TranslationModule.selectedModule = new KanjiModule();
+        TranslationModule.selectedModule.setSettings(ModuleSettings.getInstance(TranslationModule.selectedModule.getClass()));
         adapter = new ArrayAdapter<>(getActivity(), R.layout.translation, R.id.tvText);
         translationOptions.setAdapter(adapter);
         translationOptions.setNumColumns(2);

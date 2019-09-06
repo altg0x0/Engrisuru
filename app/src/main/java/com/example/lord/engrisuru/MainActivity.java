@@ -23,7 +23,6 @@ import java.io.InputStream;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static MainActivity mainActivity;
-
     public static final boolean LEARNING_MODE = true;
 
     public static EngrisuruDatabase db;
@@ -32,10 +31,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainActivity = this;
-
         final File dbFile = this.getDatabasePath("engrisurudb.sqlite");
         if (!dbFile.exists()) {
-            Log.i("DB", dbFile.getAbsolutePath());
             InputStream is = this.getApplicationContext().getResources().openRawResource(R.raw.kanjidic);
             Utils.FS.copyFileUsingStream(is, dbFile);
         }

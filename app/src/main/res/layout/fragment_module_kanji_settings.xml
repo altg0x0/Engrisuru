@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.appyvet.materialrangebar.RangeBar xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/kanji_grade_range_picker"
-        android:layout_height="wrap_content"
+    <LinearLayout
         android:layout_width="match_parent"
-        app:mrb_tickStart="1"
-        app:mrb_tickEnd="11"
-        app:mrb_tickInterval="1"
-    />
+        android:layout_height="wrap_content"
+        android:minHeight="70dp"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_kanji_grade_range"
+            />
+
+<!--    HACK: negative  pin radius to disable the pins and move topLabels to bottom-->
+<!--    TODO: rework this RangeBar-->
+        <com.appyvet.materialrangebar.RangeBar
+            android:id="@+id/kanji_grade_range_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="-16dp"
+            app:mrb_temporaryPins="false"
+            app:mrb_pinRadius="-26dp"
+            app:mrb_tickLabelSelectedColor="@android:color/white"
+            app:mrb_tickEnd="11"
+            app:mrb_tickInterval="1"
+            app:mrb_tickStart="1"
+            />
+    </LinearLayout>
 </LinearLayout>

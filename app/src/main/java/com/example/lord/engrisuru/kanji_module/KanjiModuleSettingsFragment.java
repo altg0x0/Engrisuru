@@ -20,6 +20,8 @@ public class KanjiModuleSettingsFragment extends ModuleSettingsFragment {
 //        return super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_module_kanji_settings, container, false);
         this.rootView = rootView;
+        com.appyvet.materialrangebar.RangeBar rangeBar = rootView.findViewById(R.id.kanji_grade_range_picker);
+        rangeBar.setTickTopLabels(getResources().getStringArray(R.array.kanji_grade_labels));
         return rootView;
     }
 

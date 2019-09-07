@@ -39,9 +39,8 @@ public class DatabaseManipulationFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        TranslationModule.selectedModule.setSettings(settingsFragment.getSettingsFromUI());
+        TranslationModule.selectedModule.setSettings(settingsFragment.getSettingsFromUi());
         TranslationModule.selectedModule.getSettings().writeToSandbox();
-        Utils.toast("Fired!");
     }
 
     private void initModuleSelectionSpinner(View rootView)

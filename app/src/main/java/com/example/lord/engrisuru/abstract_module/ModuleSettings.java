@@ -18,7 +18,6 @@ public abstract class ModuleSettings {
                 replace("Settings", "") + "_settings.json", this.toString()); // File should be named like "KanjiModule_settings.json"
     }
 
-    //ROADMAP: create an abstract factory for moduleSettings
 
     @Override
     public String toString() // Includes meta-information

@@ -2,13 +2,16 @@ package com.example.lord.engrisuru.kanji_module;
 
 import android.util.Log;
 
+import com.example.lord.engrisuru.Utils;
 import com.example.lord.engrisuru.abstract_module.ModuleSettings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.EnumSet;
+
 public class KanjiModuleSettings extends ModuleSettings {
-//    EnumSet<KanjiModuleTaskType> taskTypes = EnumSet.of(KanjiModuleTaskType.ENGLISH_MEANINGS);
+    EnumSet<KanjiModuleTaskType> taskTypes = EnumSet.of(KanjiModuleTaskType.ENGLISH_MEANINGS);
     int minGrade = 1, maxGrade = 1;
 
     public KanjiModuleSettings (){}
@@ -17,6 +20,7 @@ public class KanjiModuleSettings extends ModuleSettings {
         try {
             minGrade = json.getJSONObject("settings").getInt("minGrade");
             maxGrade = json.getJSONObject("settings").getInt("maxGrade");
+            taskTypes = Utils.Converter.stringToEnumSet(json.getJSONObject("settings").getString("taskTypes"), KanjiModuleTaskType.class);
         } catch (JSONException ex) {
             Log.i("Exception", "KanjiModuleSettings: Oh my GOD!");
             /* ROADMAP: do something with this exception*/}
@@ -29,7 +33,9 @@ public class KanjiModuleSettings extends ModuleSettings {
         try {
             ret = new JSONObject().
                     put("minGrade", minGrade).
-                    put("maxGrade", maxGrade);
+                    put("maxGrade", maxGrade).
+                    put("taskTypes", Utils.Converter.enumSetToString(taskTypes));
+
         }
         catch (Exception impossible) {/* Impossible */}
         return ret;

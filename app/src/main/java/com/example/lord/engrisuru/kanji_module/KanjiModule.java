@@ -1,6 +1,7 @@
 package com.example.lord.engrisuru.kanji_module;
 
 import com.example.lord.engrisuru.MainActivity;
+import com.example.lord.engrisuru.Utils;
 import com.example.lord.engrisuru.abstract_module.ModuleSettings;
 import com.example.lord.engrisuru.abstract_module.TranslationModule;
 import com.example.lord.engrisuru.abstract_module.TranslationTask;
@@ -26,9 +27,20 @@ public class KanjiModule extends TranslationModule {
     @Override
     protected TranslationTask nextTranslation(int n) {
         String[] answers = new String[n];
+        KanjiModuleTaskType taskType = Utils.randomChoice(getSettings().taskTypes);
         Kanji[] kanjiArray = MainActivity.db.kanjiDao().getKanjiByMinMaxGrade(getSettings().minGrade, getSettings().maxGrade, n);
         for (int i = 0; i < n; i++) {
-            answers[i] = kanjiArray[i].kunyomiReadings[0];
+            switch (taskType) {
+                case ONYOMI_READINGS:
+                    answers[i] = kanjiArray[i].onyomiReadings[0];
+                    break;
+                case ENGLISH_MEANINGS:
+                    answers[i] = kanjiArray[i].englishMeanings[0];
+                    break;
+                case KUNYOMI_READINGS:
+                    answers[i] = kanjiArray[i].kunyomiReadings[0];
+                    break;
+            }
         }
         Kanji askedKanji = kanjiArray[0];
         List<String> answersList = Arrays.asList(answers);

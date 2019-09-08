@@ -17,8 +17,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 import de.mfietz.jhyphenator.HyphenationPattern;
@@ -183,6 +187,22 @@ public final class Utils {
 
     }
 
+    public static class Converter {
+        // Copied from https://stackoverflow.com/questions/15685282/elegant-way-to-deserialize-enumset-from-string
+        public static <E extends Enum<E>> EnumSet<E> stringToEnumSet(String str,Class<E> eClass) {
+            String[] arr = str.split(",");
+            EnumSet<E> set = EnumSet.noneOf(eClass);
+            for (String e : arr) set.add(E.valueOf(eClass, e.trim()));
+            return set;
+        }
+
+        public static <E extends Enum<E>> String enumSetToString(EnumSet<E> enumSet) {
+            String str = enumSet.toString();
+            return str.substring(1, str.length() - 1).replace(" ", "");
+        }
+
+
+    }
 
     public static void toast(String data)
     {
@@ -199,6 +219,20 @@ public final class Utils {
             pairs.add(new Pair<>(word, prob));
         }
         return pairs;
+    }
+
+    // Copid from https://stackoverflow.com/questions/124671/picking-a-random-element-from-a-set
+    public static <E> E randomChoice(Collection<? extends E> coll) {
+        Random rand = new Random();
+        if (coll.size() == 0) {
+            return null;
+        }
+        int index = rand.nextInt(coll.size());
+        Iterator<? extends E> iterator = coll.iterator();
+        for (int i = 0; i < index; i++) {
+            iterator.next();
+        }
+        return iterator.next();
     }
 
 }

@@ -31,4 +31,38 @@
             app:mrb_tickStart="1"
             />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_kanji_activities"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <CheckBox
+                android:id="@+id/kanji_module_onyomi_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kanji_onyomi_readings"
+                />
+            <CheckBox
+                android:id="@+id/kanji_module_kunyomi_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kanji_kunyomi_readings"
+                />
+            <CheckBox
+                android:id="@+id/kanji_module_english_meanings_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kanji_english_meanings"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
 </LinearLayout>

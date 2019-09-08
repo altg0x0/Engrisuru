@@ -7,6 +7,13 @@
 
     <string name="action_settings">Settings</string>
     <string name="choose_kanji_grade_range">Choose kanji grade range (11 means ungraded kanji)</string>
+    <string name="select_kanji_activities">Select types of kanji questions (default is English meanings)</string>
+    <string name="kanji_onyomi_readings">On\'yomi readings</string>
+    <string name="kanji_kunyomi_readings">Kun\'yomi readings</string>
+    <string name="kanji_english_meanings">English meanings</string>
+<!--    <string name="onyomi_radings"></string>-->
+<!--    <string name="onyomi_radings"></string>-->
+<!--    <string name="onyomi_radings"></string>-->
     <string-array name="kanji_grade_labels">
         <item>1</item>
         <item>2</item>

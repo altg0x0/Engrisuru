@@ -14,16 +14,18 @@ public class KanjiModuleSettings extends ModuleSettings {
     EnumSet<KanjiModuleTaskType> taskTypes = EnumSet.of(KanjiModuleTaskType.ENGLISH_MEANINGS);
     int minGrade = 1, maxGrade = 1;
 
-    public KanjiModuleSettings (){}
+    public KanjiModuleSettings() {
+    }
 
-    public KanjiModuleSettings (JSONObject json) {
+    public KanjiModuleSettings(JSONObject json) {
         try {
             minGrade = json.getJSONObject("settings").getInt("minGrade");
             maxGrade = json.getJSONObject("settings").getInt("maxGrade");
             taskTypes = Utils.Converter.stringToEnumSet(json.getJSONObject("settings").getString("taskTypes"), KanjiModuleTaskType.class);
         } catch (JSONException ex) {
             Log.i("Exception", "KanjiModuleSettings: Oh my GOD!");
-            /* ROADMAP: do something with this exception*/}
+            /* ROADMAP: do something with this exception*/
+        }
 
     }
 
@@ -36,8 +38,7 @@ public class KanjiModuleSettings extends ModuleSettings {
                     put("maxGrade", maxGrade).
                     put("taskTypes", Utils.Converter.enumSetToString(taskTypes));
 
-        }
-        catch (Exception impossible) {/* Impossible */}
+        } catch (Exception impossible) {/* Impossible */}
         return ret;
     }
 

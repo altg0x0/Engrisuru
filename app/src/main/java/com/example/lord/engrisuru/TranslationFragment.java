@@ -20,18 +20,17 @@ import com.example.lord.engrisuru.rft_module.ReversibleFileTranslationModule;
 
 public class TranslationFragment extends Fragment {
 
+    private static final int n = 10;
     private View rootView;
-
     private GridView translationOptions;
     private TextView askedWord;
     private String[] translations;
-    private static final int n = 10;
     private ArrayAdapter<String> adapter;
     private TranslationItemClickListener tcl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                         Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_translations, container, false);
         translationOptions = rootView.findViewById(R.id.possibleTranslations);
@@ -59,15 +58,14 @@ public class TranslationFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    private void nextTranslationTask()
-    {
+    private void nextTranslationTask() {
         TranslationTask tt = TranslationModule.selectedModule.getBufferedTranslationTask(n);
         translations = tt.translations;
         for (int i = 0; i < translations.length; i++) {
             translations[i] = Utils.StringUtils.hyphenate(translations[i]);
         }
         tcl.tt = tt;
-        getActivity().runOnUiThread(()->
+        getActivity().runOnUiThread(() ->
         {
             askedWord.setText(tt.word);
             askedWord.invalidate();
@@ -78,18 +76,19 @@ public class TranslationFragment extends Fragment {
 
     }
 
-    private void addTranslation(View view)
-    {
-        ReversibleFileTranslationModule db = (ReversibleFileTranslationModule)TranslationModule.selectedModule;
-        String word = ((EditText)rootView.findViewById(R.id.add_trans_word)).getText().toString();
-        String translation = ((EditText)rootView.findViewById(R.id.add_trans_trans)).getText().toString();
+    private void addTranslation(View view) {
+        ReversibleFileTranslationModule db = (ReversibleFileTranslationModule) TranslationModule.selectedModule;
+        String word = ((EditText) rootView.findViewById(R.id.add_trans_word)).getText().toString();
+        String translation = ((EditText) rootView.findViewById(R.id.add_trans_trans)).getText().toString();
         try {
             boolean success = db.addWord(word, translation);
-            if (success && db.updateDatabase(true)) Utils.toast("Added!"); // Only try to write to file if word added successfully
+            if (success && db.updateDatabase(true))
+                Utils.toast("Added!"); // Only try to write to file if word added successfully
             else Utils.toast("Problem detected, translation not added!");
-            ((EditText)rootView.findViewById(R.id.add_trans_trans)).getText().clear();
-            ((EditText)rootView.findViewById(R.id.add_trans_word)).getText().clear();
-        } catch (Exception ignored) {}
+            ((EditText) rootView.findViewById(R.id.add_trans_trans)).getText().clear();
+            ((EditText) rootView.findViewById(R.id.add_trans_word)).getText().clear();
+        } catch (Exception ignored) {
+        }
     }
 
 }

@@ -10,31 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public abstract class ModuleSettings {
-    public abstract JSONObject toJSONObject(); // Should only return settings, not timestamps or other meta-information
-
-    public boolean writeToSandbox()
-    {
-        return Utils.FS.writeToSandbox(this.getClass().getSimpleName().
-                replace("Settings", "") + "_settings.json", this.toString()); // File should be named like "KanjiModule_settings.json"
-    }
-
-
-    @Override
-    public String toString() // Includes meta-information
-    {
-        try {
-            final JSONObject finalJson = new JSONObject().
-                    put("className", this.getClass().getSimpleName()).
-                    put("settings", toJSONObject());
-
-
-            return finalJson.toString(4);
-        }
-        catch (JSONException ex) { /* Should never happen */}
-        return null;
-    }
-
-
     // ROADMAP: consider moving this to another file
     // ROADMAP: use reflection, maybe?
     public static ModuleSettings getInstance(Class<? extends TranslationModule> moduleClass) {
@@ -49,10 +24,30 @@ public abstract class ModuleSettings {
         ModuleSettings ret = null;
         if (moduleClass == ReversibleFileTranslationModule.class) {
             ret = json != null ? new RFTModuleSettings(json) : new RFTModuleSettings();
-        }
-        else if (moduleClass == KanjiModule.class) {
+        } else if (moduleClass == KanjiModule.class) {
             ret = json != null ? new KanjiModuleSettings(json) : new KanjiModuleSettings();
         }
         return ret;
+    }
+
+    public abstract JSONObject toJSONObject(); // Should only return settings, not timestamps or other meta-information
+
+    public boolean writeToSandbox() {
+        return Utils.FS.writeToSandbox(this.getClass().getSimpleName().
+                replace("Settings", "") + "_settings.json", this.toString()); // File should be named like "KanjiModule_settings.json"
+    }
+
+    @Override
+    public String toString() // Includes meta-information
+    {
+        try {
+            final JSONObject finalJson = new JSONObject().
+                    put("className", this.getClass().getSimpleName()).
+                    put("settings", toJSONObject());
+
+
+            return finalJson.toString(4);
+        } catch (JSONException ex) { /* Should never happen */}
+        return null;
     }
 }

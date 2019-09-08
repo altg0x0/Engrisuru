@@ -9,9 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class TranslationModule {
     public static TranslationModule selectedModule;
-
-    private Future<TranslationTask> buffered;
     protected ExecutorService executor = Executors.newSingleThreadExecutor();
+    private Future<TranslationTask> buffered;
 
     public abstract ModuleSettings getSettings();
 
@@ -32,13 +31,12 @@ public abstract class TranslationModule {
 
     public TranslationTask getBufferedTranslationTask(int n) {
         if (buffered == null)
-                buffered = executor.submit(() -> nextTranslation(n));
+            buffered = executor.submit(() -> nextTranslation(n));
         try {
             TranslationTask ret = buffered.get(10000, TimeUnit.SECONDS);
             buffered = executor.submit(() -> nextTranslation(n));
             return ret;
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             Log.e("TranslationModule", "getBufferedTranslationTask: ", ex);
         }
         return null; // Should never happen

@@ -24,8 +24,7 @@ public class DatabaseManipulationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
+                             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_database_manipulation, container, false);
         initModuleSelectionSpinner(rootView);
         rootView.findViewById(R.id.export_database).setOnClickListener((__) -> exportJSONDatabase());
@@ -43,8 +42,7 @@ public class DatabaseManipulationFragment extends Fragment {
         TranslationModule.selectedModule.getSettings().writeToSandbox();
     }
 
-    private void initModuleSelectionSpinner(View rootView)
-    {
+    private void initModuleSelectionSpinner(View rootView) {
         Spinner moduleSelectionSpinner = rootView.findViewById(R.id.moduleSelectionSpinner);
         final String[] moduleOptionsNames = new String[]{"Eng-Rus simple"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, moduleOptionsNames);
@@ -53,9 +51,8 @@ public class DatabaseManipulationFragment extends Fragment {
     }
 
     // ROADMAP: refactor these UI-unrelated functions
-    private boolean exportJSONDatabase()
-    {
-        return  TranslationModule.selectedModule.exportModule();
+    private boolean exportJSONDatabase() {
+        return TranslationModule.selectedModule.exportModule();
     }
 
     private void importJSONDatabase() {

@@ -16,17 +16,7 @@ public class RFTModuleSettings extends ModuleSettings {
         } catch (JSONException ex) {/* ROADMAP: do something with this exception*/}
     }
 
-    public RFTModuleSettings() {}
-
-    @Override
-    public JSONObject toJSONObject() {
-        JSONObject ret = null;
-        try {
-            ret = new JSONObject().
-                    put("reversed", reversed);
-        }
-        catch (Exception impossible) {/* Impossible */}
-        return ret;
+    public RFTModuleSettings() {
     }
 
     static RFTModuleSettings getSettingsFromFSWithDefault() {
@@ -38,5 +28,15 @@ public class RFTModuleSettings extends ModuleSettings {
             } catch (JSONException ex) {/* Return default*/}
         }
         return new RFTModuleSettings();
+    }
+
+    @Override
+    public JSONObject toJSONObject() {
+        JSONObject ret = null;
+        try {
+            ret = new JSONObject().
+                    put("reversed", reversed);
+        } catch (Exception impossible) {/* Impossible */}
+        return ret;
     }
 }

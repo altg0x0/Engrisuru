@@ -37,25 +37,39 @@ public class ReversibleFileTranslationModule extends TranslationModule {
 
     private RFTModuleSettings settings = new RFTModuleSettings(); //TODO load settings from file
 
-    @Override
-    public RFTModuleSettings getSettings() {
-        return settings;
-    }
-    @Override
-    protected void applySettings(ModuleSettings settingsValue) {this.settings = (RFTModuleSettings) settingsValue;}
-
-    public ReversibleFileTranslationModule(String json)
-    {
+    public ReversibleFileTranslationModule(String json) {
         try {
             this.dict = new JSONObject(json);
             this.settings = RFTModuleSettings.getSettingsFromFSWithDefault();
-        }
-        catch (JSONException ex) {
+        } catch (JSONException ex) {
             Log.e("JSON", "Very bad JSON");
         }
         updateDatabase();
     }
 
+    private static List<String> pickNRandom(String[] src, int n) {
+        List<String> lst = Arrays.asList(src);
+        List<String> copy = new LinkedList<>(lst);
+        Collections.shuffle(copy);
+        return copy.subList(0, n);
+    }
+
+    public static ReversibleFileTranslationModule initFromFile(Context appContext) {
+        String json = !Utils.FS.fileExistsInSandbox("db.json") ?
+                Utils.FS.readStringFromRes("defaultjson", appContext) :
+                Utils.FS.readFromSandbox("db.json");
+        return new ReversibleFileTranslationModule(json);
+    }
+
+    @Override
+    public RFTModuleSettings getSettings() {
+        return settings;
+    }
+
+    @Override
+    protected void applySettings(ModuleSettings settingsValue) {
+        this.settings = (RFTModuleSettings) settingsValue;
+    }
 
     private String valueByKey(String key) throws JSONException {
         JSONObject wordObj = dict.getJSONObject(key);
@@ -63,8 +77,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     }
 
     @SuppressWarnings("Convert2Diamond")
-    public boolean updateDatabase(boolean... params)
-    {
+    public boolean updateDatabase(boolean... params) {
         boolean save = (params.length >= 1) && params[0];
         int length = dict.length();
         keys = new String[length];
@@ -72,24 +85,21 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         weights = new Double[length];
         Iterator<String> iterator = dict.keys();
         int i = 0;
-        while (iterator.hasNext())
-        {
+        while (iterator.hasNext()) {
             try {
                 keys[i] = iterator.next();
                 JSONObject wordObj = dict.getJSONObject(keys[i]); // This is a repetition of valueByKey.
                 values[i] = (String) wordObj.get("V");            // However, getting json object here is necessary,
                 weights[i] = wordObj.getDouble("P");        // so it's ok
                 i++;
-            }
-            catch (JSONException ex) {/*10 GOTO HELL;*/}
+            } catch (JSONException ex) {/*10 GOTO HELL;*/}
         }
         wordsWeighted = new EnumeratedDistribution<String>(Utils.zip(keys, weights));
         if (!save) return false;
         return writeToFile();
     }
 
-    private boolean writeToFile()
-    {
+    private boolean writeToFile() {
         try {
             return Utils.FS.writeToSandbox("db.json", dict.toString(4));
         } catch (JSONException e) {
@@ -98,16 +108,14 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         }
     }
 
-    public void modifyDataByAnswer(TranslationTask task)
-    {
+    public void modifyDataByAnswer(TranslationTask task) {
         boolean correct = task.isAnswerCorrect(task.answer);
         if (MainActivity.LEARNING_MODE) {
-            multiplyProb(isReversed()? task.correctTranslation : task.word, correct ? .5 : 4);
+            multiplyProb(isReversed() ? task.correctTranslation : task.word, correct ? .5 : 4);
         }
     }
 
-    public boolean exportModule()
-    {
+    public boolean exportModule() {
         if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()))
             return false;
         try {
@@ -115,7 +123,9 @@ public class ReversibleFileTranslationModule extends TranslationModule {
             Utils.FS.writeFileToSD("export.json", data);
             Utils.toast("Export successful!");
             return true;
-        } catch (JSONException ex) {return false;}
+        } catch (JSONException ex) {
+            return false;
+        }
     }
 
     public boolean addWord(String word, String trans) {
@@ -126,11 +136,12 @@ public class ReversibleFileTranslationModule extends TranslationModule {
             value.put("V", trans);
             dict.put(word, value);
             return true;
-        } catch (JSONException ex) {return false;}
+        } catch (JSONException ex) {
+            return false;
+        }
     }
 
-    public TranslationTask nextTranslation(int n)
-    {
+    public TranslationTask nextTranslation(int n) {
         try {
             String word = wordsWeighted.sample();
             String correctTranslation = (String) dict.getJSONObject(word).get("V");
@@ -142,10 +153,9 @@ public class ReversibleFileTranslationModule extends TranslationModule {
                 translations.remove(translations.size() - 1);
             translations.add(correctTranslation);
             Collections.shuffle(translations, rnd);
-            String[] translationsArray =  translations.toArray(new String[0]);
+            String[] translationsArray = translations.toArray(new String[0]);
             return new TranslationTask(word, translationsArray, correctTranslation);
-        }
-        catch (JSONException ex) {/* FWCK YOU*/}
+        } catch (JSONException ex) {/* FWCK YOU*/}
         return null;
     }
 
@@ -156,7 +166,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         List<String> copy = new LinkedList<>(lst); // Need a copy for shuffling
         Collections.shuffle(copy);
         Iterator<String> potentialCandidatesIterator = copy.iterator();
-        for (int i = 1; i < n;) {
+        for (int i = 1; i < n; ) {
             String potentialCandidate = potentialCandidatesIterator.next();
             if (valueByKey(potentialCandidate).equals(valueByKey(correctAnswer))) continue;
             candidates[i] = potentialCandidate;
@@ -165,14 +175,6 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         List<String> candidatesList = Arrays.asList(candidates);
         Collections.shuffle(candidatesList);
         return candidatesList.toArray(new String[0]);
-    }
-
-    private static List<String> pickNRandom(String[] src, int n)
-    {
-        List<String> lst = Arrays.asList(src);
-        List<String> copy = new LinkedList<>(lst);
-        Collections.shuffle(copy);
-        return copy.subList(0, n);
     }
 
     private void multiplyProb(String word, double coef) {
@@ -189,14 +191,6 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    public static ReversibleFileTranslationModule initFromFile(Context appContext)
-    {
-        String json = !Utils.FS.fileExistsInSandbox("db.json") ?
-                Utils.FS.readStringFromRes("defaultjson", appContext) :
-                Utils.FS.readFromSandbox("db.json");
-        return new ReversibleFileTranslationModule(json);
     }
 
     boolean isReversed() {

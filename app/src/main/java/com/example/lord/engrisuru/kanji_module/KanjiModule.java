@@ -63,8 +63,8 @@ public class KanjiModule extends TranslationModule {
     @Override
     public void modifyDataByAnswer(TranslationTask task) {
         boolean correct = task.isAnswerCorrect(task.answer);
-        Kanji askedKanji = ((KanjiTranslationTask)task).askedKanji;
-        askedKanji.weight *= correct? .6 : 1.2;
+        Kanji askedKanji = ((KanjiTranslationTask) task).askedKanji;
+        askedKanji.weight *= correct ? .6 : 1.2;
 //        Log.i(TAG, "modifyDataByAnswer: new weight is" + askedKanji.weight);
         executor.execute(() -> MainActivity.db.kanjiDao().updateWeight(askedKanji));
     }

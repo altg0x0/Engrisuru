@@ -20,10 +20,9 @@ import java.util.concurrent.TimeUnit;
  * Created by lord on 02/03/18.
  */
 
-public class TranslationItemClickListener implements AdapterView.OnItemClickListener
-{
+public class TranslationItemClickListener implements AdapterView.OnItemClickListener {
     TranslationTask tt = null;
-    private  View[] translationsLayouts;
+    private View[] translationsLayouts;
     private Runnable afterClick;
     private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
@@ -33,25 +32,22 @@ public class TranslationItemClickListener implements AdapterView.OnItemClickList
 
     private boolean blocked = false;
 
-    TranslationItemClickListener(View[] translationsLayouts_arg, Runnable afterClick_arg)
-    {
-        this.translationsLayouts =  translationsLayouts_arg;
+    TranslationItemClickListener(View[] translationsLayouts_arg, Runnable afterClick_arg) {
+        this.translationsLayouts = translationsLayouts_arg;
         this.afterClick = afterClick_arg;
     }
 
-    private void refreshButtons(Context context)
-    {
-        for (View v: translationsLayouts) {
+    private void refreshButtons(Context context) {
+        for (View v : translationsLayouts) {
             defaultDrawable = ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.translation);
             v.setBackground(defaultDrawable);
         }
     }
 
     @Override
-    public void onItemClick(AdapterView parent, View view, int position, long id)
-    {
+    public void onItemClick(AdapterView parent, View view, int position, long id) {
         if (blocked)
-                return;
+            return;
         translationsLayouts = new View[parent.getCount()];
         for (int i = 0; i < translationsLayouts.length; i++) {
             if (parent.getChildAt(i) == null) return;
@@ -62,11 +58,11 @@ public class TranslationItemClickListener implements AdapterView.OnItemClickList
         correctDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_correct);
         incorrectDrawable = ContextCompat.getDrawable(view.getContext().getApplicationContext(), R.drawable.translation_incorrect); // No more than one of each of these is used, so no cycle is needed
         boolean overallCorrect = false;
-        for (View v: translationsLayouts) {
+        for (View v : translationsLayouts) {
             v.setClickable(false);
             v.setEnabled(false);
             TextView tv = v.findViewById(R.id.tvText);
-            String userAnswer = ((String)tv.getText()).replace("\u00AD","");
+            String userAnswer = ((String) tv.getText()).replace("\u00AD", "");
             boolean correct = tt.isAnswerCorrect(userAnswer); // Is the text in v the correct translation?
             if (v == view) {
                 tt.answer = userAnswer;
@@ -78,10 +74,10 @@ public class TranslationItemClickListener implements AdapterView.OnItemClickList
         }
         //noinspection PointlessArithmeticExpression
         executor.schedule(() -> {
-                blocked = false;
-                ((Activity)parent.getContext()).runOnUiThread(() -> refreshButtons(parent.getContext()));
-                afterClick.run();
-        }, (overallCorrect? 800 : 1700) / (MainActivity.LEARNING_MODE? 1 : 10), TimeUnit.MILLISECONDS); // Decreases delay if LEARNING_MODE is disabled
+            blocked = false;
+            ((Activity) parent.getContext()).runOnUiThread(() -> refreshButtons(parent.getContext()));
+            afterClick.run();
+        }, (overallCorrect ? 800 : 1700) / (MainActivity.LEARNING_MODE ? 1 : 10), TimeUnit.MILLISECONDS); // Decreases delay if LEARNING_MODE is disabled
     }
 }
 

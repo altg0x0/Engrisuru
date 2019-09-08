@@ -22,10 +22,13 @@ import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static MainActivity mainActivity;
     public static final boolean LEARNING_MODE = true;
-
     public static EngrisuruDatabase db;
+    private static MainActivity mainActivity;
+
+    static Context getAppContext() {
+        return mainActivity.getApplicationContext();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TranslationFragment()).commit();
 
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -119,10 +123,5 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    static Context getAppContext()
-    {
-        return mainActivity.getApplicationContext();
     }
 }

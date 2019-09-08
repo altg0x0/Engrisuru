@@ -41,7 +41,8 @@ public class KanjiModuleSettingsFragment extends ModuleSettingsFragment {
         EnumSet<KanjiModuleTaskType> enumSet = EnumSet.noneOf(KanjiModuleTaskType.class);
         if (onyomiCheckbox.isChecked()) enumSet.add(KanjiModuleTaskType.ONYOMI_READINGS);
         if (kunyomiCheckbox.isChecked()) enumSet.add(KanjiModuleTaskType.KUNYOMI_READINGS);
-        if (englishMeaningsCheckbox.isChecked() || enumSet.isEmpty()) enumSet.add(KanjiModuleTaskType.ENGLISH_MEANINGS);
+        if (englishMeaningsCheckbox.isChecked() || enumSet.isEmpty())
+            enumSet.add(KanjiModuleTaskType.ENGLISH_MEANINGS);
         settings.taskTypes = enumSet;
         return settings;
     }

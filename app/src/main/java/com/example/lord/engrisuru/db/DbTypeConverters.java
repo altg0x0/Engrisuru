@@ -6,26 +6,22 @@ import androidx.room.TypeConverter;
 
 public class DbTypeConverters {
     @TypeConverter
-    public String[] stringToStringArray (String str)
-    {
+    public String[] stringToStringArray(String str) {
         return str.split(",");
     }
 
     @TypeConverter
-    public String stringToStringArray (String[] strArr)
-    {
+    public String stringToStringArray(String[] strArr) {
         return TextUtils.join(",", strArr);
     }
 
     @TypeConverter
-    public char StringToChar(String str)
-    {
+    public char StringToChar(String str) {
         return str.charAt(0);
     }
 
     @TypeConverter
-    public String StringToChar(char ch)
-    {
+    public String StringToChar(char ch) {
         return Character.toString(ch);
     }
 }

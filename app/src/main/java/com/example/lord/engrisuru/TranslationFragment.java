@@ -39,7 +39,7 @@ public class TranslationFragment extends Fragment {
 //            TranslationModule.selectedModule = ReversibleFileTranslationModule.initFromFile(this.getActivity());
             TranslationModule.selectedModule = new KanjiModule();
         TranslationModule.selectedModule.setSettings(ModuleSettings.getInstance(TranslationModule.selectedModule.getClass()));
-        adapter = new ArrayAdapter<>(getActivity(), R.layout.translation, R.id.tvText);
+        adapter = new ArrayAdapter<>(MainActivity.getMainActivity(), R.layout.translation, R.id.tvText);
         translationOptions.setAdapter(adapter);
         translationOptions.setNumColumns(2);
         translationOptions.setHorizontalSpacing(10);
@@ -53,11 +53,6 @@ public class TranslationFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
     private void nextTranslationTask() {
         TranslationTask tt = TranslationModule.selectedModule.getBufferedTranslationTask(n);
         translations = tt.translations;
@@ -65,7 +60,7 @@ public class TranslationFragment extends Fragment {
             translations[i] = Utils.StringUtils.hyphenate(translations[i]);
         }
         tcl.tt = tt;
-        getActivity().runOnUiThread(() ->
+        MainActivity.getMainActivity().runOnUiThread(() ->
         {
             askedWord.setText(tt.word);
             askedWord.invalidate();

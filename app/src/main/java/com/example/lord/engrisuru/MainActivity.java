@@ -30,6 +30,10 @@ public class MainActivity extends AppCompatActivity
         return mainActivity.getApplicationContext();
     }
 
+    static MainActivity getMainActivity() {
+        return mainActivity;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

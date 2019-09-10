@@ -39,4 +39,9 @@ public class RFTModuleSettings extends ModuleSettings {
         } catch (Exception impossible) {/* Impossible */}
         return ret;
     }
+
+    @Override
+    public String getModuleName() {
+        return ReversibleFileTranslationModule.class.getSimpleName();
+    }
 }

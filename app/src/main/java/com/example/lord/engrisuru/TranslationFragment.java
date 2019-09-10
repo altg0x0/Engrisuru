@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import com.example.lord.engrisuru.abstract_module.ModuleSettings;
 import com.example.lord.engrisuru.abstract_module.TranslationModule;
 import com.example.lord.engrisuru.abstract_module.TranslationTask;
-import com.example.lord.engrisuru.kanji_module.KanjiModule;
 import com.example.lord.engrisuru.rft_module.ReversibleFileTranslationModule;
 
 
@@ -36,8 +35,7 @@ public class TranslationFragment extends Fragment {
         translationOptions = rootView.findViewById(R.id.possibleTranslations);
         askedWord = rootView.findViewById(R.id.askedWord);
         if (TranslationModule.selectedModule == null)
-//            TranslationModule.selectedModule = ReversibleFileTranslationModule.initFromFile(this.getActivity());
-            TranslationModule.selectedModule = new KanjiModule();
+            TranslationModule.selectedModule = TranslationModule.getInstanceByPreferences();
         TranslationModule.selectedModule.setSettings(ModuleSettings.getInstance(TranslationModule.selectedModule.getClass()));
         adapter = new ArrayAdapter<>(MainActivity.getMainActivity(), R.layout.translation, R.id.tvText);
         translationOptions.setAdapter(adapter);

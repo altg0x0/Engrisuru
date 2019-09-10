@@ -35,7 +35,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
     private Random rnd = new Random();
     private EnumeratedDistribution<String> wordsWeighted;
 
-    private RFTModuleSettings settings = new RFTModuleSettings(); //TODO load settings from file
+    private RFTModuleSettings settings = new RFTModuleSettings();
 
     public ReversibleFileTranslationModule(String json) {
         try {

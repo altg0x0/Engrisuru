@@ -2,6 +2,11 @@ package com.example.lord.engrisuru.abstract_module;
 
 import android.util.Log;
 
+import com.example.lord.engrisuru.ApplicationPreferences;
+import com.example.lord.engrisuru.MainActivity;
+import com.example.lord.engrisuru.kanji_module.KanjiModule;
+import com.example.lord.engrisuru.rft_module.ReversibleFileTranslationModule;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -11,6 +16,21 @@ public abstract class TranslationModule {
     public static TranslationModule selectedModule;
     protected ExecutorService executor = Executors.newSingleThreadExecutor();
     private Future<TranslationTask> buffered;
+
+    public static  TranslationModule getInstanceByPreferences() {
+        final String rftModuleName = ReversibleFileTranslationModule.class.getSimpleName();
+        final String kanjiModuleName = KanjiModule.class.getSimpleName();
+
+        String targetModuleName = ApplicationPreferences.getSelectedTranslationModuleClass();
+        TranslationModule ret = null;
+        if (targetModuleName.equals(kanjiModuleName)) {
+            ret = new KanjiModule();
+        } else if(targetModuleName.equals(rftModuleName)) {
+            ret = ReversibleFileTranslationModule.initFromFile(MainActivity.getAppContext());
+        }
+        return ret;
+    }
+
 
     public abstract ModuleSettings getSettings();
 

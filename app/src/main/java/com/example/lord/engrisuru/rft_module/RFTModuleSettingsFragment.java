@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 
 import com.example.lord.engrisuru.R;
 import com.example.lord.engrisuru.abstract_module.ModuleSettings;
-import com.example.lord.engrisuru.abstract_module.TranslationModule;
 import com.example.lord.engrisuru.abstract_module.ui.ModuleSettingsFragment;
 
 public class RFTModuleSettingsFragment extends ModuleSettingsFragment {
@@ -26,13 +25,6 @@ public class RFTModuleSettingsFragment extends ModuleSettingsFragment {
     public void setUiBySettings(ModuleSettings moduleSettings) {
         RFTModuleSettings settings = (RFTModuleSettings) moduleSettings;
         ((CheckBox) rootView.findViewById(R.id.reverseModuleCheckbox)).setChecked(settings.reversed);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        TranslationModule.selectedModule.getSettings().writeToSandbox();
-//        Log.i("onPause:", "Fire!");
     }
 
     public RFTModuleSettings getSettingsFromUi() {

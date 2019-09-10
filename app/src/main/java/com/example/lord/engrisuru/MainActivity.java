@@ -24,13 +24,13 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static final boolean LEARNING_MODE = true;
     public static EngrisuruDatabase db;
-    private static MainActivity mainActivity;
+    private static MainActivity mainActivity; // No memory leak because only one MainActivity may exist at given time
 
-    static Context getAppContext() {
+    public static Context getAppContext() {
         return mainActivity.getApplicationContext();
     }
 
-    static MainActivity getMainActivity() {
+    public static MainActivity getMainActivity() {
         return mainActivity;
     }
 

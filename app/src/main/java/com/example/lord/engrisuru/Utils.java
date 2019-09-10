@@ -1,6 +1,7 @@
 package com.example.lord.engrisuru;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,7 +52,7 @@ public final class Utils {
         return pairs;
     }
 
-    // Copid from https://stackoverflow.com/questions/124671/picking-a-random-element-from-a-set
+    // Copied from https://stackoverflow.com/questions/124671/picking-a-random-element-from-a-set
     public static <E> E randomChoice(Collection<? extends E> coll) {
         Random rand = new Random();
         if (coll.size() == 0) {
@@ -63,6 +64,10 @@ public final class Utils {
             iterator.next();
         }
         return iterator.next();
+    }
+
+    public static SharedPreferences getSharedPreferences() {
+        return MainActivity.getAppContext().getSharedPreferences("engrisuru", Context.MODE_PRIVATE);
     }
 
     public final static class FS {

@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public abstract class ModuleSettings {
+    public abstract String getModuleName();
+
     // ROADMAP: consider moving this to another file
     // ROADMAP: use reflection, maybe?
     public static ModuleSettings getInstance(Class<? extends TranslationModule> moduleClass) {
@@ -33,8 +35,7 @@ public abstract class ModuleSettings {
     public abstract JSONObject toJSONObject(); // Should only return settings, not timestamps or other meta-information
 
     public boolean writeToSandbox() {
-        return Utils.FS.writeToSandbox(this.getClass().getSimpleName().
-                replace("Settings", "") + "_settings.json", this.toString()); // File should be named like "KanjiModule_settings.json"
+        return Utils.FS.writeToSandbox(this.getModuleName() + "_settings.json", this.toString()); // File should be named like "KanjiModule_settings.json"
     }
 
     @Override
@@ -48,6 +49,6 @@ public abstract class ModuleSettings {
 
             return finalJson.toString(4);
         } catch (JSONException ex) { /* Should never happen */}
-        return null;
+        return "{}"; // Should never happen
     }
 }

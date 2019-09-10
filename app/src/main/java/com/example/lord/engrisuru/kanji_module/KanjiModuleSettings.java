@@ -42,4 +42,8 @@ public class KanjiModuleSettings extends ModuleSettings {
         return ret;
     }
 
+    @Override
+    public String getModuleName() {
+        return KanjiModule.class.getSimpleName();
+    }
 }

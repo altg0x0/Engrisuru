@@ -30,12 +30,13 @@ public interface KanjiDao {
 
     // ROADMAP: change hardcoded constants
     @Query("with delim(maxweight, maxrowid) as " +
-            "(select weight, kanji.rowid from kanji where grade between :minGrade and :maxGrade and " +
-            "   weight > 1 order by weight, rowid limit 1 offset :n)" +
-            "    select character, grade, onyomiReadings, kunyomiReadings, englishMeanings, weight from kanji join delim " +
-            "    where grade between :minGrade and :maxGrade and weight <= maxweight and kanji.rowid < maxrowid " +
-            "        order by abs(random() / 2147483648) / weight " +
-            "        limit :n;")
+           "    (select weight, kanji.rowid from kanji where grade between :minGrade and :maxGrade and " +
+           "    weight > 1 order by weight, rowid limit 1 offset :n)" +
+           "select character, grade, onyomiReadings, kunyomiReadings, englishMeanings, weight from kanji join delim " +
+           "where grade between :minGrade and :maxGrade and " +
+           "    weight <= ifnull(maxweight, 1) or (weight = ifnull(maxweight, 1) and kanji.rowid < ifnull(maxrowid, 2147483648))" +
+           "order by abs(random() / 2147483648) / weight " +
+           "limit :n;")
     Kanji[] getKanjiByMinMaxGradeGentleMode(int minGrade, int maxGrade, int n);
 
     @Query("SELECT COUNT(*) FROM Kanji")

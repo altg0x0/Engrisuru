@@ -35,6 +35,8 @@ public class KanjiModuleSettingsFragment extends ModuleSettingsFragment {
         com.appyvet.materialrangebar.RangeBar rangeBar = rootView.findViewById(R.id.kanji_grade_range_picker);
         settings.minGrade = rangeBar.getLeftIndex() + 1;
         settings.maxGrade = rangeBar.getRightIndex() + 1;
+        CheckBox gentleModeCheckbox = rootView.findViewById(R.id.kanji_module_gentle_mode_checkbox);
+        settings.gentleMode = gentleModeCheckbox.isChecked();
         CheckBox onyomiCheckbox = rootView.findViewById(R.id.kanji_module_onyomi_checkbox);
         CheckBox kunyomiCheckbox = rootView.findViewById(R.id.kanji_module_kunyomi_checkbox);
         CheckBox englishMeaningsCheckbox = rootView.findViewById(R.id.kanji_module_english_meanings_checkbox);
@@ -52,6 +54,8 @@ public class KanjiModuleSettingsFragment extends ModuleSettingsFragment {
         RangeBar rangeBar = rootView.findViewById(R.id.kanji_grade_range_picker);
         KanjiModuleSettings settings = (KanjiModuleSettings) moduleSettings;
         rangeBar.setRangePinsByIndices(settings.minGrade - 1, settings.maxGrade - 1);
+        CheckBox gentleModeCheckbox = rootView.findViewById(R.id.kanji_module_gentle_mode_checkbox);
+        gentleModeCheckbox.setChecked(settings.gentleMode);
         CheckBox onyomiCheckbox = rootView.findViewById(R.id.kanji_module_onyomi_checkbox);
         CheckBox kunyomiCheckbox = rootView.findViewById(R.id.kanji_module_kunyomi_checkbox);
         CheckBox englishMeaningsCheckbox = rootView.findViewById(R.id.kanji_module_english_meanings_checkbox);

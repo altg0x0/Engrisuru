@@ -120,7 +120,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
             return false;
         try {
             String data = this.dict.toString(4);
-            Utils.FS.writeFileToSD("export.json", data);
+            Utils.FS.writeStringToFileOnSD("export.json", data);
             Utils.toast("Export successful!");
             return true;
         } catch (JSONException ex) {

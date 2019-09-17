@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+//        Utils.FS.getExternalStoragePath();
         if (savedInstanceState != null) return; // Avoid double fragment creation
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TranslationFragment()).commit();
 

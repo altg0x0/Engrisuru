@@ -11,7 +11,8 @@
     <string name="kanji_onyomi_readings">On\'yomi readings</string>
     <string name="kanji_kunyomi_readings">Kun\'yomi readings</string>
     <string name="kanji_english_meanings">English meanings</string>
-<!--    <string name="onyomi_radings"></string>-->
+    <string name="kanji_gentle_mode">Gentle mode (learn kanji in small portions)</string>
+    <!--    <string name="onyomi_radings"></string>-->
 <!--    <string name="onyomi_radings"></string>-->
 <!--    <string name="onyomi_radings"></string>-->
     <string-array name="kanji_grade_labels">

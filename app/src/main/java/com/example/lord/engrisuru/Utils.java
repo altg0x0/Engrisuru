@@ -1,6 +1,7 @@
 package com.example.lord.engrisuru;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -79,7 +80,7 @@ public final class Utils {
         public static boolean writeToSandbox(String filename, String data) // Returns true if written successfully
         {
             File file = new File(MainActivity.getAppContext().getFilesDir(), filename);
-            return writeFile(file, data);
+            return writeStringToFile(file, data);
         }
 
         public static String readFile(File file) {
@@ -130,12 +131,12 @@ public final class Utils {
         static String readFileFromSD(String filename) {
             if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()))
                 return null;
-            String basePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/engrisuru/";
+            String basePath = getExternalStoragePath() + "/engrisuru/";
             File file = new File(basePath + filename);
             return readFile(file);
         }
 
-        public static boolean writeFile(File file, String data) {
+        public static boolean writeStringToFile(File file, String data) {
 
             File dir = new File(file.getParent());
             if (!dir.exists() && !dir.mkdirs()) {
@@ -150,10 +151,10 @@ public final class Utils {
             }
         }
 
-        public static boolean writeFileToSD(String relativePath, String data) {
-            String basePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/engrisuru/";
+        public static boolean writeStringToFileOnSD(String relativePath, String data) {
+            String basePath = getExternalStoragePath() + "/engrisuru/";
             File file = new File(basePath + relativePath);
-            return writeFile(file, data);
+            return writeStringToFile(file, data);
         }
 
         public static void copyFileUsingStream(InputStream is, File dest) {
@@ -171,6 +172,14 @@ public final class Utils {
                 Log.e(TAG, "copyFileUsingStream: ", ex);
             }
 
+        }
+
+        public static String getExternalStoragePath() {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            MainActivity.getMainActivity().startActivityForResult(Intent.createChooser(intent, "Choose directory"), 9999);
+//            Log.i("PATH", intent.getData().getPath());
+            return Environment.getExternalStorageDirectory().getAbsolutePath();
         }
 
     }

@@ -12,7 +12,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
-import androidx.room.Room;
 
 import com.example.lord.engrisuru.db.EngrisuruDatabase;
 import com.google.android.material.navigation.NavigationView;
@@ -23,7 +22,6 @@ import java.io.InputStream;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static final boolean LEARNING_MODE = true;
-    public static EngrisuruDatabase db;
     private static MainActivity mainActivity; // No memory leak because only one MainActivity may exist at given time
 
     public static Context getAppContext() {
@@ -41,9 +39,9 @@ public class MainActivity extends AppCompatActivity
         final File dbFile = this.getDatabasePath("engrisurudb.sqlite");
         if (!dbFile.exists()) {
             InputStream is = this.getApplicationContext().getResources().openRawResource(R.raw.kanjidic);
-            Utils.FS.copyFileUsingStream(is, dbFile);
+            Utils.FS.writeStreamToFile(is, dbFile);
         }
-        db = Room.databaseBuilder(this.getApplicationContext(), EngrisuruDatabase.class, "engrisurudb.sqlite").build();
+        EngrisuruDatabase.init();
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -58,7 +56,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        Utils.FS.getExternalStoragePath();
         if (savedInstanceState != null) return; // Avoid double fragment creation
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new TranslationFragment()).commit();
 

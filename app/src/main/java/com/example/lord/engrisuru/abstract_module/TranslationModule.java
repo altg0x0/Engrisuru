@@ -47,6 +47,8 @@ public abstract class TranslationModule {
 
     public abstract boolean exportModule();
 
+    public abstract boolean importModule();
+
     public abstract void modifyDataByAnswer(TranslationTask task);
 
     public TranslationTask getBufferedTranslationTask(int n) {

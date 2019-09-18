@@ -28,8 +28,8 @@ public class DatabaseManipulationFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_database_manipulation, container, false);
         initModuleSelectionSpinner(rootView);
-        rootView.findViewById(R.id.export_database).setOnClickListener((__) -> exportJSONDatabase());
-        rootView.findViewById(R.id.import_database).setOnClickListener((__) -> importJSONDatabase());
+        rootView.findViewById(R.id.export_database).setOnClickListener((__) -> exportSelectedModule());
+        rootView.findViewById(R.id.import_database).setOnClickListener((__) -> importSelectedModule());
         setupSettingsFragment();
         return rootView;
     }
@@ -85,19 +85,16 @@ public class DatabaseManipulationFragment extends Fragment {
     }
 
     // ROADMAP: refactor these UI-unrelated functions
-    private boolean exportJSONDatabase() {
-        return TranslationModule.selectedModule.exportModule();
+    private boolean exportSelectedModule() {
+        boolean ret = TranslationModule.selectedModule.exportModule();
+        Utils.toast(ret ? "Export successful!" : "Export failed");
+        return ret;
     }
 
-    private void importJSONDatabase() {
-        String json = Utils.FS.readFileFromSD("import.json");
-        if (json == null) {
-            Utils.toast("Import failed TT");
-            return;
-        }
-        TranslationModule.selectedModule = new ReversibleFileTranslationModule(json);
-        TranslationModule.selectedModule.updateDatabase(true);
-        Utils.toast("Import successful!");
+    private boolean importSelectedModule() {
+        boolean ret = TranslationModule.selectedModule.importModule();
+        Utils.toast(ret ? "Import successful!" : "Import failed TT");
+        return ret;
     }
 
 }

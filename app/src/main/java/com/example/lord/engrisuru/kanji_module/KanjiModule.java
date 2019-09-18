@@ -1,13 +1,12 @@
 package com.example.lord.engrisuru.kanji_module;
 
-import com.example.lord.engrisuru.MainActivity;
 import com.example.lord.engrisuru.Utils;
 import com.example.lord.engrisuru.abstract_module.ModuleSettings;
 import com.example.lord.engrisuru.abstract_module.TranslationModule;
 import com.example.lord.engrisuru.abstract_module.TranslationTask;
+import com.example.lord.engrisuru.db.EngrisuruDatabase;
 import com.example.lord.engrisuru.japanese.Kanji;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -30,8 +29,8 @@ public class KanjiModule extends TranslationModule {
         String[] answers = new String[n];
         KanjiModuleTaskType taskType = Utils.randomChoice(getSettings().taskTypes);
         Kanji[] kanjiArray = getSettings().gentleMode ?
-                MainActivity.db.kanjiDao().getKanjiByMinMaxGradeGentleMode(getSettings().minGrade, getSettings().maxGrade, n) :
-                MainActivity.db.kanjiDao().getKanjiByMinMaxGrade(getSettings().minGrade, getSettings().maxGrade, n);
+                EngrisuruDatabase.getInstance().kanjiDao().getKanjiByMinMaxGradeGentleMode(getSettings().minGrade, getSettings().maxGrade, n) :
+                EngrisuruDatabase.getInstance().kanjiDao().getKanjiByMinMaxGrade(getSettings().minGrade, getSettings().maxGrade, n);
         for (int i = 0; i < n; i++) {
             switch (taskType) {
                 case ONYOMI_READINGS:
@@ -61,10 +60,12 @@ public class KanjiModule extends TranslationModule {
 
     @Override
     public boolean exportModule() {
-//        MainActivity.db.close();
-        final File dbFile = MainActivity.getAppContext().getDatabasePath("engrisurudb.sqlite");
+        return EngrisuruDatabase.exportDatabase();
+    }
 
-        return false;
+    @Override
+    public boolean importModule() {
+        return EngrisuruDatabase.importDatabase();
     }
 
     @Override
@@ -73,6 +74,6 @@ public class KanjiModule extends TranslationModule {
         Kanji askedKanji = ((KanjiTranslationTask) task).askedKanji;
         askedKanji.weight *= correct ? .6 : 1.5;
 //        Log.i(TAG, "modifyDataByAnswer: new weight is" + askedKanji.weight);
-        executor.execute(() -> MainActivity.db.kanjiDao().updateWeight(askedKanji));
+        executor.execute(() -> EngrisuruDatabase.getInstance().kanjiDao().updateWeight(askedKanji));
     }
 }

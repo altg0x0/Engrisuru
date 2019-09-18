@@ -1,7 +1,6 @@
 package com.example.lord.engrisuru;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -29,8 +28,6 @@ import java.util.regex.Pattern;
 
 import de.mfietz.jhyphenator.HyphenationPattern;
 import de.mfietz.jhyphenator.Hyphenator;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by lord on 23/03/18.
@@ -115,8 +112,7 @@ public final class Utils {
                 while ((length = ins.read(buffer)) != -1) {
                     result.write(buffer, 0, length);
                 }
-                String json = result.toString("UTF-8");
-                return json;
+                return result.toString("UTF-8");
             } catch (Exception ignored) {
             }
             return null;
@@ -128,10 +124,10 @@ public final class Utils {
             return readFile(file);
         }
 
-        static String readFileFromSD(String filename) {
+        public static String readFileFromSD(String filename) {
             if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()))
                 return null;
-            String basePath = getExternalStoragePath() + "/engrisuru/";
+            String basePath = getExternalStoragePath();
             File file = new File(basePath + filename);
             return readFile(file);
         }
@@ -152,12 +148,12 @@ public final class Utils {
         }
 
         public static boolean writeStringToFileOnSD(String relativePath, String data) {
-            String basePath = getExternalStoragePath() + "/engrisuru/";
+            String basePath = getExternalStoragePath();
             File file = new File(basePath + relativePath);
             return writeStringToFile(file, data);
         }
 
-        public static void copyFileUsingStream(InputStream is, File dest) {
+        public static boolean writeStreamToFile(InputStream is, File dest) {
             OutputStream os = null;
             try {
                 os = new FileOutputStream(dest);
@@ -169,17 +165,38 @@ public final class Utils {
                 is.close();
                 os.close();
             } catch (IOException ex) {
-                Log.e(TAG, "copyFileUsingStream: ", ex);
+                ex.printStackTrace();
+                return false;
             }
+            return true;
+        }
 
+        private static boolean copyFile(File source, File dest) {
+            try {
+                InputStream is = new FileInputStream(source);
+                return writeStreamToFile(is, dest);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            return false;
+        }
+
+        public static boolean copyFileToExternalStorage(File source, String relativePath) {
+            File dest = new File(getExternalStoragePath() + "/" + relativePath);
+            return copyFile(source, dest);
+        }
+
+        public static boolean copyFileFromExternalStorage(String relativePath, File dest) {
+            File source = new File(getExternalStoragePath() + "/" + relativePath);
+            return copyFile(source, dest);
         }
 
         public static String getExternalStoragePath() {
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-            intent.addCategory(Intent.CATEGORY_DEFAULT);
-            MainActivity.getMainActivity().startActivityForResult(Intent.createChooser(intent, "Choose directory"), 9999);
+//            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+//            intent.addCategory(Intent.CATEGORY_DEFAULT);
+//            MainActivity.getMainActivity().startActivityForResult(Intent.createChooser(intent, "Choose directory"), 9999);
 //            Log.i("PATH", intent.getData().getPath());
-            return Environment.getExternalStorageDirectory().getAbsolutePath();
+            return Environment.getExternalStorageDirectory().getAbsolutePath() + "/engrisuru/";
         }
 
     }

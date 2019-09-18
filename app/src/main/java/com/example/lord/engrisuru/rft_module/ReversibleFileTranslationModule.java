@@ -128,6 +128,17 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         }
     }
 
+    @Override
+    public boolean importModule() {
+        String json = Utils.FS.readFileFromSD("import.json");
+        if (json == null) {
+            return false;
+        }
+        TranslationModule.selectedModule = new ReversibleFileTranslationModule(json);
+        TranslationModule.selectedModule.updateDatabase(true);
+        return true;
+    }
+
     public boolean addWord(String word, String trans) {
         if (Objects.equals(word, "") || Objects.equals(trans, "")) return false;
         JSONObject value = new JSONObject();
@@ -193,7 +204,7 @@ public class ReversibleFileTranslationModule extends TranslationModule {
         }
     }
 
-    boolean isReversed() {
+    private boolean isReversed() {
         return settings.reversed;
     }
 

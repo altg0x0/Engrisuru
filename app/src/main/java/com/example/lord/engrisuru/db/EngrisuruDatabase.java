@@ -7,11 +7,14 @@ import androidx.room.TypeConverters;
 
 import com.example.lord.engrisuru.MainActivity;
 import com.example.lord.engrisuru.Utils;
+import com.example.lord.engrisuru.db.kanji.KanjiDao;
+import com.example.lord.engrisuru.db.kanji.KanjiGentleModeEntry;
+import com.example.lord.engrisuru.db.kanji.KanjiGentleModeEntryDao;
 import com.example.lord.engrisuru.japanese.Kanji;
 
 import java.io.File;
 
-@Database(entities = {Kanji.class}, version = 1)
+@Database(entities = {Kanji.class, KanjiGentleModeEntry.class}, version = 2)
 @TypeConverters(DbTypeConverters.class)
 public abstract class EngrisuruDatabase extends RoomDatabase {
     // https://stackoverflow.com/questions/50103232/using-singleton-within-the-android-room-library
@@ -25,7 +28,9 @@ public abstract class EngrisuruDatabase extends RoomDatabase {
         return instance;
     }
     public static void init() {
-        instance = Room.databaseBuilder(MainActivity.getAppContext(), EngrisuruDatabase.class, "engrisurudb.sqlite").build();
+        instance = Room.databaseBuilder(MainActivity.getAppContext(), EngrisuruDatabase.class, "engrisurudb.sqlite").
+                addMigrations(DbMigrations.MIGRATION_1_2).
+                build();
     }
 
     public static boolean exportDatabase() {
@@ -45,7 +50,6 @@ public abstract class EngrisuruDatabase extends RoomDatabase {
     }
 
 
-
-
     abstract public KanjiDao kanjiDao();
+    abstract public KanjiGentleModeEntryDao kanjiGentleModeEntryDao();
 }

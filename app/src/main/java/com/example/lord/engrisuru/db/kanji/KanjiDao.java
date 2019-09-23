@@ -1,4 +1,4 @@
-package com.example.lord.engrisuru.db;
+package com.example.lord.engrisuru.db.kanji;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -28,17 +28,14 @@ public interface KanjiDao {
     @Query("select * from Kanji where grade between :minGrade and :maxGrade order by abs(random() / 2147483648) / weight limit :n;")
     Kanji[] getKanjiByMinMaxGrade(int minGrade, int maxGrade, int n);
 
-    // ROADMAP: change hardcoded constants
-    @Query("with true_delim(maxweight, maxrowid) as " +
-           "    (select weight, kanji.rowid from kanji where grade between :minGrade and :maxGrade and " +
-           "    weight > 1 order by weight, rowid limit 1 offset :n)," +
-           "delim_or_default(maxweight, maxrowid) as " +
-           "    (select * from (select * from true_delim union values(1.e308, 2147483648)) order by maxweight limit 1)" +
-           "select character, grade, onyomiReadings, kunyomiReadings, englishMeanings, weight from kanji join delim_or_default " +
-           "where grade between :minGrade and :maxGrade and " +
-           "    weight <= ifnull(maxweight, 1) or (weight = ifnull(maxweight, 1) and kanji.rowid < ifnull(maxrowid, 2147483648))" +
-           "order by abs(random() / 2147483648) / weight " +
-           "limit :n;")
+    @Query("with somePossiblyUnlearntKanji(character, grade, onyomiReadings, kunyomiReadings, englishMeanings, weight) as " +
+           "   (select * from kanji where grade between :minGrade and :maxGrade and weight >= 1 order by abs(random() / 2147483648) / weight limit :n) " +
+           "select * from (select kanji.character, grade, onyomiReadings, kunyomiReadings, englishMeanings, weight " +
+           "   from kanji left join kanjiGentleModeEntry on kanji.character = kanjiGentleModeEntry.character " +
+           "       where grade between :minGrade and :maxGrade " +
+           "       and  learnt = 1 or kanji.weight < 1 " +
+           "   union select * from somePossiblyUnlearntKanji) " +
+           "order by abs(random() / 2147483648) / weight limit :n ")
     Kanji[] getKanjiByMinMaxGradeGentleMode(int minGrade, int maxGrade, int n);
 
     @Query("SELECT COUNT(*) FROM Kanji")

@@ -5,6 +5,7 @@ import com.example.lord.engrisuru.abstract_module.ModuleSettings;
 import com.example.lord.engrisuru.abstract_module.TranslationModule;
 import com.example.lord.engrisuru.abstract_module.TranslationTask;
 import com.example.lord.engrisuru.db.EngrisuruDatabase;
+import com.example.lord.engrisuru.db.kanji.KanjiGentleModeEntry;
 import com.example.lord.engrisuru.japanese.Kanji;
 
 import java.util.Arrays;
@@ -74,6 +75,7 @@ public class KanjiModule extends TranslationModule {
         Kanji askedKanji = ((KanjiTranslationTask) task).askedKanji;
         askedKanji.weight *= correct ? .6 : 1.5;
 //        Log.i(TAG, "modifyDataByAnswer: new weight is" + askedKanji.weight);
+        executor.execute(() -> KanjiGentleModeEntry.updateForKanji(askedKanji));
         executor.execute(() -> EngrisuruDatabase.getInstance().kanjiDao().updateWeight(askedKanji));
     }
 }

@@ -33,7 +33,7 @@ public interface KanjiDao {
            "select * from (select kanji.character, grade, onyomiReadings, kunyomiReadings, englishMeanings, weight " +
            "   from kanji left join kanjiGentleModeEntry on kanji.character = kanjiGentleModeEntry.character " +
            "       where grade between :minGrade and :maxGrade " +
-           "       and  learnt = 1 or kanji.weight < 1 " +
+           "       and (learnt = 1 or kanji.weight < 1)" +
            "   union select * from somePossiblyUnlearntKanji) " +
            "order by abs(random() / 2147483648) / weight limit :n ")
     Kanji[] getKanjiByMinMaxGradeGentleMode(int minGrade, int maxGrade, int n);
